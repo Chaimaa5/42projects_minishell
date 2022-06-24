@@ -1,7 +1,7 @@
 NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-RD = -lreadline 
+RD = -lreadline -L /goinfre/cel-mhan/.brew/Library/Taps/homebrew/homebrew-core
 SRC = exec/pwd.c
 
 all : $(NAME)
