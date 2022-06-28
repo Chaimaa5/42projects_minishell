@@ -1,13 +1,17 @@
 NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-RD = -lreadline -L /goinfre/cel-mhan/.brew/Library/Taps/homebrew/homebrew-core
-SRC = exec/pwd.c
+SRC = lexer/lexer.c
+LIB = libft.a
 
 all : $(NAME)
 
-$(NAME): $(SRC)
-	$(CC) $(CFLAGS) $(RD) $(SRC) -o $(NAME)
+$(LIB):
+	make -C libft
+	cp libft/libft.a ./
+
+$(NAME): $(SRC) $(LIB)
+	$(CC) $(CFLAGS) $(SRC) -o $(NAME) $(LIB)
 clean:
 	rm -rf $(OBJ)
 fclean:
