@@ -1,7 +1,7 @@
 NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
-SRC = lexer/lexer.c
+SRC = lexer/lexer.c lexer/tokenizer.c
 LIB = libft.a
 
 all : $(NAME)
@@ -16,5 +16,7 @@ clean:
 	rm -rf $(OBJ)
 fclean:
 	rm -rf $(NAME)
+	rm -rf $(LIB)
+
 
 re: fclean all

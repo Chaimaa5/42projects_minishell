@@ -27,3 +27,14 @@ void	lexer_skip_whitespaces(t_lexer *lexer)
     while (lexer->c == ' ')
         lexer_advance(lexer);
 }
+
+t_token *get_token(t_lexer *lexer)
+{
+    while (lexer->c != '\0' && lexer->pos < ft_strlen(lexer->line))
+    {
+        if (lexer->c == ' ')
+            lexer_skip_whitespaces(lexer);
+        if (lexer->c = '<')
+            return (tokenozier(lexer, init_token(redo, get_string(lexer))));
+    }
+}
