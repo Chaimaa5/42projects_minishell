@@ -14,9 +14,10 @@ $(NAME): $(SRC) $(LIB)
 	$(CC) $(CFLAGS) $(SRC) -o $(NAME) $(LIB)
 clean:
 	rm -rf $(OBJ)
+	rm -rf libft/*.o
 fclean:
 	rm -rf $(NAME)
 	rm -rf $(LIB)
-
+	rm -rf libft/libft.a
 
 re: fclean all

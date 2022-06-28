@@ -14,6 +14,7 @@
 #include <signal.h>
 #include <errno.h>
 #include <limits.h>
+#include <ctype.h>
 
 #define ERROR 0
 #define MALLOC_ERR 1

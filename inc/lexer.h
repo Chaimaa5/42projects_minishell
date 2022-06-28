@@ -13,5 +13,9 @@ void	lexer_advance(t_lexer *lexer);
 void	lexer_skip_whitespaces(t_lexer *lexer);
 t_token *get_next_token(t_lexer *lexer);
 t_token *collect_string(t_lexer *lexer);
+char    *get_char_as_string(t_lexer *lexer);
+t_token *advance_token(t_lexer *lexer, t_token *token);
+t_token *collect_cmd(t_lexer *lexer);
+t_token *collect_red(t_lexer *lexer);
 
 #endif
