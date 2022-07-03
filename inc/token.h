@@ -1,5 +1,7 @@
 #ifndef TOKEN_H
 #define TOKEN_H
+#include "lexer.h"
+
 
 typedef struct s_token
 {

@@ -1,7 +1,7 @@
 NAME = minishell
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
-SRC = lexer/lexer.c lexer/tokenizer.c
+CFLAGS = -Wall -Wextra -Werror -lreadline
+SRC = exec/main.c exec/builtins.c
 LIB = libft.a
 
 # This is a minimal set of ANSI/VT100 color codes

@@ -26,4 +26,8 @@ typedef struct s_table{
     char *args;
 }   t_table;
 
+//  builtins
+void    builtins_pwd(void);
+void    builtins_echo(char *arg);
+void    builtins_cd(char *path);
 #endif
