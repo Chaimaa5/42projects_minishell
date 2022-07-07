@@ -26,6 +26,10 @@ typedef struct s_table{
     char *args;
 }   t_table;
 
+typedef struct s_env{
+    char        *env;
+    struct s_env *next;
+}   t_env;
 //  builtins
 void    builtins_pwd(void);
 void    builtins_echo(char *arg);

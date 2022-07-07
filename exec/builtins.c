@@ -1,14 +1,4 @@
 #include "../inc/header.h"
-// void    signal_handler(int sig)
-// {
-//     if (sig == SIGINT)
-//     {
-//         printf("\n");
-//         rl_on_new_line();
-//         rl_replace_line("", 0);
-//         rl_redisplay();
-//     }
-// }
 
 void    builtins_pwd(void)
 {
@@ -25,7 +15,18 @@ void    builtins_echo(char *arg)
 
 void    builtins_cd(char *path)
 {
+    if (path == NULL)
+        chdir(getenv("HOME"));
     chdir(path);
 }
 
+void    builtins_env(void)
+{
+    t_env   *env;
+
+    
+}
 void    builtins_export()
+{
+
+}
