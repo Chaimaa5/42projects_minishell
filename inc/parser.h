@@ -18,7 +18,7 @@ typedef struct s_redirection
 
 //redirections
 t_redirection	*new_red(char *type, char *file);
-int	red_size(t_redirection *lst);
+int             red_size(t_redirection *lst);
 void	red_add_back(t_redirection **lst, t_redirection *new);
 void	red_add_front(t_redirection **lst, t_redirection *new);
 t_redirection	*red_last(t_redirection *lst);

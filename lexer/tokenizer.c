@@ -56,7 +56,8 @@ t_token	*ft_tokenlast(t_token *lst)
 	i = 0;
 	if (!lst)
 		return (0);
-	while (lst->next)
-		lst = lst->next;
+	
+	while (lst->next){
+		lst = lst->next;}
 	return (lst);
 }

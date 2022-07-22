@@ -129,7 +129,7 @@ t_lexer *init_lexer(char *line)
 	add_history(line);
 	lexer->line = line;
 	lexer->pos = 0;
-	lexer->cunt_arg = 0;
+	lexer->cunt_pp = 0;
 	if(!ft_syntax_error(lexer->line, lexer))
 	{
 		printf("SYNTAX ERROR\n");
@@ -154,11 +154,10 @@ void	lexer_skip_whitespaces(t_lexer *lexer)
 		lexer_advance(lexer);
 }
 
-void	collect_cmd(t_lexer *lexer)
+void	collect_cmd(t_lexer *lexer, t_token **token)
 {
 	char *value;
 	char *s;
-	t_token **tokens;
 
 	value = malloc(1);
 	value[0] = '\0';
@@ -169,78 +168,49 @@ void	collect_cmd(t_lexer *lexer)
 		s = get_char_as_string(lexer);  
 		value = ft_strjoin(value, s);
 		lexer_advance(lexer);
-		lexer->cunt_arg += 1;
 	}
 	//free(s);
-	ft_tokenadd_back(tokens, ft_newtoken(TOKEN_CMD, value)));
+	ft_tokenadd_back(token, ft_newtoken(TOKEN_CMD, value));
 }
 
-void	collect_opn(t_lexer *lexer)
-{
-	char *value;
-	char *s;
-	t_token	**tokens;
-
-	value = malloc(1);
-	value[0] = '\0';
-	s = get_char_as_string(lexer);
-	value = ft_strjoin(value, s);
-	//free(s);
-	lexer_advance(lexer);
-	while ((lexer->c >= 'a' && lexer->c <= 'z') || (lexer->c >= 'A' && lexer->c <= 'Z'))
-	{
-		s = get_char_as_string(lexer);
-		value = ft_strjoin(value, s);
-		lexer_advance(lexer);
-	}
-	if((lexer->c < 'a' && lexer->c > 'z') || (lexer->c < 'A' && lexer->c > 'Z'))
-		return(NULL);
-	lexer_advance(lexer);
-	//free(s);
-	ft_tokenadd_back(tokens, ft_newtoken(TOKEN_OPN, value)));
-}
-
-t_token *get_next_token(t_lexer *lexer)
+void	get_next_token(t_lexer *lexer, t_token **token)
 {
 	while (lexer->c != '\0' && lexer->pos < ft_strlen(lexer->line))
 	{
+
 		if (lexer->c == ' ')
 			lexer_skip_whitespaces(lexer);
 		else if (lexer->c == '"')
-			return (collect_string(lexer));
+			collect_string(lexer, token);
 		else if(lexer->c == '\'')
-			return (collect_string(lexer));
+			collect_string(lexer, token);
 		else if (lexer->c == '<' )
 		{
 			lexer_advance(lexer);
 			if(lexer->c == '<')
-				return (advance_token(lexer, ft_newtoken(TOKEN_HEREDOC, "<<")));
+				advance_token(lexer, ft_newtoken(TOKEN_HEREDOC, "<<"), token);
 			else 
-				return (advance_token(lexer, ft_newtoken(TOKEN_REDOUT, "<")));
+				advance_token(lexer, ft_newtoken(TOKEN_REDOUT, "<"), token);
 		}
 		else if (lexer->c == '>' )
 		{
 			lexer_advance(lexer);
 			if(lexer->c == '>')
-				return (advance_token(lexer, ft_newtoken(TOKEN_APPEND, ">>")));
+				advance_token(lexer, ft_newtoken(TOKEN_APPEND, ">>"), token);
 			else 
-				return (advance_token(lexer, ft_newtoken(TOKEN_REDIN, ">")));
+				advance_token(lexer, ft_newtoken(TOKEN_REDIN, ">"), token);
 		}
 		else if (lexer->c == '|')
-			return (advance_token(lexer, ft_newtoken(TOKEN_PIPE, get_char_as_string(lexer))));
-		else if(lexer->c == '-')
-			return(collect_opn(lexer));
+			advance_token(lexer, ft_newtoken(TOKEN_PIPE, get_char_as_string(lexer)), token);
 		else
-			return (collect_cmd(lexer));
+			collect_cmd(lexer, token);
 	}
-	return (NULL);
 }
 
-void	collect_string(t_lexer *lexer)
+void	collect_string(t_lexer *lexer, t_token **token)
 {
 	char *value;
 	char *s;
-	t_token	**tokens;
 
 	value = malloc(1);
 	value[0] = '\0';
@@ -261,7 +231,8 @@ void	collect_string(t_lexer *lexer)
 	}
 	lexer_advance(lexer);
 	//free(s);
-	return(ft_tokenadd_back(tokens,ft_newtoken(TOKEN_STR, value)));
+
+	ft_tokenadd_back(token, ft_newtoken(TOKEN_STR, value));
 }
 
 char *get_char_as_string(t_lexer *lexer)
@@ -274,8 +245,8 @@ char *get_char_as_string(t_lexer *lexer)
 	return(str);
 }
 
-t_token *advance_token(t_lexer *lexer, t_token *token)
+void	advance_token(t_lexer *lexer, t_token *token, t_token **tokens)
 {
 	lexer_advance(lexer);
-	return (token);
+	ft_tokenadd_back(tokens, token);
 }
