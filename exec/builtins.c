@@ -20,12 +20,12 @@ void    builtins_cd(char *path)
     chdir(path);
 }
 
-void    builtins_env(void)
-{
-    t_env   *env;
+// void    builtins_env(void)
+// {
+//     t_env   *env;
 
     
-}
+// }
 void    builtins_export()
 {
 

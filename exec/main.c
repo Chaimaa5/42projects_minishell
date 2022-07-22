@@ -1,23 +1,31 @@
-#include "../inc/header.h"
+  #include "../inc/header.h"
 
 
-int main()
+int main(int argc, char **argv, char **envp)
 {
-    char buf[250];
+  redirections(argv, envp);
+  loop_pipe()
+}
 
-    // char *read;
-    chdir(getenv("HOME"));
-    getcwd(buf, sizeof(buf));
-    printf("%s\n", buf);
-    // printf("PATH: %s\n", getenv("PATH"));
-    // while(1)
-    // {
-    //     // signal(SIGINT, signal_handler);
-    //     //termination signal
-    //     // signal(SIGQUIT, SIG_IGN);
-    //     // printf("");
-    //     read = readline("minishell>>");
-    //     add_history(read);
-    //     // printf("%s\n", read);
-    // }
+void pipe-loop{
+  int *end[2];
+
+  while(cmd->next)
+  {
+    pipe(ends);
+    int pid=fork();
+    if (pid ==0)
+    {
+      child(cmd);
+    }
+    cmd = cmd->next;
+  }
+  execute-lastcmd();
+}
+
+typedef struct cmd{
+
+  char *cmd;
+  char **args;
+  cmd *next; 
 }
