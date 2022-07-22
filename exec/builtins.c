@@ -19,14 +19,3 @@ void    builtins_cd(char *path)
         chdir(getenv("HOME"));
     chdir(path);
 }
-
-// void    builtins_env(void)
-// {
-//     t_env   *env;
-
-    
-// }
-void    builtins_export()
-{
-
-}

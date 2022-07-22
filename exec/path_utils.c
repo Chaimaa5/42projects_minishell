@@ -13,27 +13,6 @@ void	free_array(char **array)
 	free(array);
 }
 
-int	ft_strncmp(char *s1, char *s2, size_t n)
-{
-	size_t			i;
-	unsigned char	*s11;
-	unsigned char	*s22;
-
-	s11 = (unsigned char *)s1;
-	s22 = (unsigned char *)s2;
-	i = 0;
-	while (i < n)
-	{
-		if (s11[i] && s22[i] && s11[i] == s22[i])
-		{
-			i++;
-			continue ;
-		}
-		return (s11[i] - s22[i]);
-	}
-	return (0);
-}
-
 char	**find_path(char **envp)
 {
 	int		i;

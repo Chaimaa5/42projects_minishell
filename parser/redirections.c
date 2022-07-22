@@ -1,19 +1,21 @@
 #include "../inc/header.h"
+#include "../inc/parser.h"
 
-t_token	*ft_newtoken(int type, char *value)
+t_redirection	*new_red(char *type, char *file)
 {
-	t_token	*new;
+	t_redirection	*new;
 
-	new = malloc(sizeof(t_token) * 1);
+	new = malloc(sizeof(t_redirection) * 1);
 	if (!new)
 		return (0);
-	new->content = value;
-    new->type = type;
+	new->type = type;
+    new->file = file;
 	new->next = NULL;
 	return (new);
 }
 
-int	ft_tokensize(t_token *lst)
+
+int	red_size(t_redirection *lst)
 {
 	int	size;
 
@@ -28,28 +30,28 @@ int	ft_tokensize(t_token *lst)
 	return (size);
 }
 
-void	ft_tokenadd_back(t_token **lst, t_token *new)
+void	red_add_back(t_redirection **lst, t_redirection *new)
 {
-	t_token	*list;
+	t_redirection	*list;
 
 	list = *lst;
 	if (!*lst)
 		*lst = new;
 	else
 	{
-		list = ft_tokenlast(*lst);
+		list = red_last(*lst);
 		list->next = new;
 	}
 }
 
-void	ft_tokenadd_front(t_token **lst, t_token *new)
+void	red_add_front(t_redirection **lst, t_redirection *new)
 {
 	if (new)
 		new->next = *lst;
 	*lst = new;
 }
 
-t_token	*ft_tokenlast(t_token *lst)
+t_redirection	*red_last(t_redirection *lst)
 {
 	int	i;
 
