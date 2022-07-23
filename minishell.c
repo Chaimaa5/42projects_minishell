@@ -2,9 +2,7 @@
 #include "inc/lexer.h"
 int main(int ac, char **av)
 {
-	t_token	**token;
-
-	token = malloc(sizeof(t_token *));
+	t_token	token;
 
 	char *line;
 	(void) ac;
@@ -12,7 +10,7 @@ int main(int ac, char **av)
 	while ("everything is okey")
 	{
 		line = readline("minishell: ");
-		lexing(line, token);
+		lexing(line, &token);
 
 	}
 	return (0);

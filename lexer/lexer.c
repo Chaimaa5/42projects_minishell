@@ -173,37 +173,37 @@ void	collect_cmd(t_lexer *lexer, t_token **token)
 	ft_tokenadd_back(token, ft_newtoken(TOKEN_CMD, value));
 }
 
-void	get_next_token(t_lexer *lexer, t_token **token)
-{
+void	get_next_token(t_lexer *lexer, t_token *token)
+{		
 	while (lexer->c != '\0' && lexer->pos < ft_strlen(lexer->line))
 	{
 
 		if (lexer->c == ' ')
 			lexer_skip_whitespaces(lexer);
 		else if (lexer->c == '"')
-			collect_string(lexer, token);
+			collect_string(lexer, &token);
 		else if(lexer->c == '\'')
-			collect_string(lexer, token);
+			collect_string(lexer, &token);
 		else if (lexer->c == '<' )
 		{
 			lexer_advance(lexer);
 			if(lexer->c == '<')
-				advance_token(lexer, ft_newtoken(TOKEN_HEREDOC, "<<"), token);
+				advance_token(lexer, ft_newtoken(TOKEN_HEREDOC, "<<"), &token);
 			else 
-				advance_token(lexer, ft_newtoken(TOKEN_REDOUT, "<"), token);
+				advance_token(lexer, ft_newtoken(TOKEN_REDOUT, "<"), &token);
 		}
 		else if (lexer->c == '>' )
 		{
 			lexer_advance(lexer);
 			if(lexer->c == '>')
-				advance_token(lexer, ft_newtoken(TOKEN_APPEND, ">>"), token);
+				advance_token(lexer, ft_newtoken(TOKEN_APPEND, ">>"),&token);
 			else 
-				advance_token(lexer, ft_newtoken(TOKEN_REDIN, ">"), token);
+				advance_token(lexer, ft_newtoken(TOKEN_REDIN, ">"), &token);
 		}
 		else if (lexer->c == '|')
-			advance_token(lexer, ft_newtoken(TOKEN_PIPE, get_char_as_string(lexer)), token);
+			advance_token(lexer, ft_newtoken(TOKEN_PIPE, get_char_as_string(lexer)), &token);
 		else
-			collect_cmd(lexer, token);
+			collect_cmd(lexer, &token);
 	}
 }
 
@@ -230,8 +230,6 @@ void	collect_string(t_lexer *lexer, t_token **token)
 			lexer_advance(lexer);
 	}
 	lexer_advance(lexer);
-	//free(s);
-
 	ft_tokenadd_back(token, ft_newtoken(TOKEN_STR, value));
 }
 
