@@ -15,14 +15,11 @@ void    builtins_echo(char **arg)
     i = 1;
     while (arg)
     {
-        printf("%s", arg[i]);
+        printf("%s ", arg[i]);
         i++;
     }
     if (ft_strncmp(arg[0], "-n"))
-    {
-    else
-    
-    printf("%s\n", arg);
+        printf("\n");
 }
 
 void    builtins_cd(char *path)
