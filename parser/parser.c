@@ -12,5 +12,7 @@ void	lexing(char *line, t_token *token)
 			token = get_next_token(lexer);
 		printf("%d, %s\n", token->type, token->content);}
 		lexer_advance(lexer);
+
 	}
 }
+

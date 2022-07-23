@@ -7,13 +7,11 @@ typedef struct s_token
     char *content;
     enum  {
     TOKEN_STR,
-    TOKEN_CMD,
     TOKEN_PIPE,
     TOKEN_REDIN,
     TOKEN_REDOUT,
     TOKEN_HEREDOC,
     TOKEN_APPEND,
-    TOKEN_OPN,
     }type;
 }   t_token;
 
