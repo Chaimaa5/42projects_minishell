@@ -2,6 +2,8 @@
 #define HEADER_H
 
 #include "../libft/libft.h"
+#include "lexer.h"
+#include "token.h"
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>

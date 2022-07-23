@@ -8,8 +8,20 @@ void    builtins_pwd(void)
     printf("%s\n", buf);
 }
 
-void    builtins_echo(char *arg)
+void    builtins_echo(char **arg)
 {
+    int i;
+
+    i = 1;
+    while (arg)
+    {
+        printf("%s", arg[i]);
+        i++;
+    }
+    if (ft_strncmp(arg[0], "-n"))
+    {
+    else
+    
     printf("%s\n", arg);
 }
 
@@ -18,15 +30,4 @@ void    builtins_cd(char *path)
     if (path == NULL)
         chdir(getenv("HOME"));
     chdir(path);
-}
-
-// void    builtins_env(void)
-// {
-//     t_env   *env;
-
-    
-// }
-void    builtins_export()
-{
-
 }

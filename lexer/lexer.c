@@ -120,21 +120,3 @@ t_token *advance_token(t_lexer *lexer, t_token *token)
 	return (token);
 }
 
-int main(int ac, char **av)
-{
-	t_token *token;
-	t_lexer *lexer;
-	char *line;
-	(void) ac;
-	(void) av;
-	while (1)
-	{
-		line = readline("our minishell: ");
-		lexer = init_lexer(line);
-		while(lexer->c != '\0'){
-			token = get_next_token(lexer);
-		printf("TOKEN(%d, %s)\n", token->type, token->content);}
-		lexer_advance(lexer);
-	}
-	return (0);
-}

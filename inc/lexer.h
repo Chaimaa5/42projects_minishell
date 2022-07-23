@@ -18,5 +18,6 @@ char    *get_char_as_string(t_lexer *lexer);
 t_token *advance_token(t_lexer *lexer, t_token *token);
 t_token *collect_cmd(t_lexer *lexer);
 t_token *collect_red(t_lexer *lexer);
+void	lexing(char *line, t_token *token);
 
 #endif
