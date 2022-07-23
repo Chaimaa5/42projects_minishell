@@ -8,7 +8,9 @@ void	lexing(char *line, t_token *token)
 	lexer = init_lexer(line);
 	if(lexer)
 	{
-		token = get_next_token(lexer);
-		printf("%s--%d\n", token->content, token->type);
+		while(lexer->c != '\0'){
+			token = get_next_token(lexer);
+		printf("%d, %s\n", token->type, token->content);}
+		lexer_advance(lexer);
 	}
 }
