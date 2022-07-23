@@ -2,10 +2,6 @@
 #define HEADER_H
 
 #include "../libft/libft.h"
-<<<<<<< HEAD
-=======
-#include "parser.h"
->>>>>>> 87b439deb0d7d882bc6b47bea2a1a80dafb785f6
 #include "lexer.h"
 #include "token.h"
 #include "parser.h"
