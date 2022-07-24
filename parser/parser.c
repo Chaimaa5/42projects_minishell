@@ -11,9 +11,11 @@ void    builtins_pwd(void)
 void    builtins_cd(char *path)
 {
 	
-	printf("path: %s", path);
     if (path == NULL || !ft_strncmp(path, "~", 2))
-        chdir(getenv("HOME"));
+	{
+        if(!chdir(getenv("HOME")))
+			printf("cd: HOME not set\n");
+	}
 	else
 		chdir(path);
 }
