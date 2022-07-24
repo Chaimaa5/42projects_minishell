@@ -119,6 +119,18 @@ int ft_syntax_error(char *line)
 		return(1);
 }
 
+int count_pipe(char *line)
+{
+	int i;
+	int x;
+	i = -1;
+	x = 0;
+	while(line[++i])
+		if(line[i] == '|')
+			x++;
+	return(x);
+}
+
 t_lexer *init_lexer(char *line)
 {
 	t_lexer *lexer;
@@ -133,6 +145,7 @@ t_lexer *init_lexer(char *line)
 		printf("SYNTAX ERROR\n");
 		return(NULL);
 	}
+	lexer->nb_pipe = count_pipe(lexer->line);
 	lexer->c = lexer->line[lexer->pos];
 	return (lexer);
 }
