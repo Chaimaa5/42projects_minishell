@@ -39,3 +39,37 @@ env_list	*env_last(env_list *lst)
 		lst = lst->next;
 	return (lst);
 }
+
+env_list    **read_env(char **envp)
+{
+    env_list    **env;
+    char        **tmp;
+    int         i;
+
+    i = 0;
+    while(envp[i])
+    {
+        tmp = ft_split(envp[i], '=');
+        env = env_add_back(env, new_env(tmp[0], tmp[1], "="));
+    }
+    return (env);
+}
+
+void    print_env(env_list *env)
+{
+
+}
+
+void    search_env(env_list *env, char *arg)
+{
+
+}
+
+void    execute_env(env_list *env, char **envp, char *arg)
+{
+    read_env(envp);
+    if (!arg)
+        print_env(env);
+    else
+        search_env(env, arg);
+}
