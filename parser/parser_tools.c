@@ -1,7 +1,7 @@
 #include "../inc/header.h"
 #include "../inc/parser.h"
 
-t_parser	*new_parse(char *cmd, char **args, char *type, char *file)
+t_parser	*new_parse(char *cmd, char **args, t_redirection *red)
 {
 	t_parser	*new;
 
@@ -10,9 +10,9 @@ t_parser	*new_parse(char *cmd, char **args, char *type, char *file)
 		return (0);
 	new->cmd = cmd;
     new->args = args;
-	new->red = new_red(type, file);
+	new->red = red;
 	new->next = NULL;
-	return (new);
+	return (new); 
 }
 
 int	parse_size(t_parser *lst)
