@@ -2,6 +2,8 @@
 
 void set_export(env_list *env,  char *line)
 {
+    char    *tmp;
+    
     if (!check_key(line))
     {
         if (!ft_strchr(line, '='))
