@@ -1,5 +1,14 @@
 #include "../../inc/header.h"
 
+env_list	*env_last(env_list *lst)
+{
+	if (!lst)
+		return (0);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
+}
+
 env_list	*new_env(char *key, char *content, char *separator)
 {
 	env_list	*new;
@@ -28,18 +37,6 @@ void	env_add_back(env_list **lst, env_list *new)
 	}
 }
 
-env_list	*env_last(env_list *lst)
-{
-	int	i;
-
-	i = 0;
-	if (!lst)
-		return (0);
-	while (lst->next)
-		lst = lst->next;
-	return (lst);
-}
-
 env_list    **read_env(char **envp)
 {
     env_list    **env;
@@ -47,29 +44,28 @@ env_list    **read_env(char **envp)
     int         i;
 
     i = 0;
+	env = malloc(sizeof(env_list *));
     while(envp[i])
     {
         tmp = ft_split(envp[i], '=');
-        env = env_add_back(env, new_env(tmp[0], tmp[1], "="));
+        env_add_back(env, new_env(tmp[0], tmp[1], "="));
     }
     return (env);
 }
 
-void    print_env(env_list *env)
-{
+void    execute_env(env_list *env, char **envp)
 
-}
+    env_list    *env;
+    char        **tmp;
+    int         i;
 
-void    search_env(env_list *env, char *arg)
-{
-
-}
-
-void    execute_env(env_list *env, char **envp, char *arg)
-{
-    read_env(envp);
-    if (!arg)
-        print_env(env);
-    else
-        search_env(env, arg);
+    i = 0;
+    while(envp[i])
+    {
+        tmp = ft_split(envp[i], '=');
+        env_add_back(&env, new_env(tmp[0], tmp[1], "="));
+		printf("%s%s%s\n", env->key, env->separator, env->content);
+		env = env->next;
+		i++;
+    }
 }
