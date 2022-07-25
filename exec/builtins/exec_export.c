@@ -1,46 +1,24 @@
 #include "../../inc/header.h"
 
-env_list	*new_env(char *key, char *content, char *separator)
+void set_export()
 {
-	env_list	*new;
-
-	new = malloc(sizeof(env_list) * 1);
-	if (!new)
-		return (0);
-	new->key = key;
-    new->content = content;
-	new->separator = separator;
-	new->next = NULL;
-	return (new);
+    // split args
+    // addback(content key)
 }
 
-void	env_add_back(env_list **lst, env_list *new)
+void    print_exort(env_list *env)
 {
-	env_list	*list;
+	env_list *list;
 
-	list = *lst;
-	if (!*lst)
-		*lst = new;
-	else
+	list = env;
+	while (!list)
 	{
-		list = env_last(*lst);
-		list->next = new;
+		printf("declare -x %s%s%s\n", list->key, list->separator, list->content);
+		list = list->next;
 	}
 }
 
-env_list	*env_last(env_list *lst)
+void    exec_export(env_list *env)
 {
-	int	i;
 
-	i = 0;
-	if (!lst)
-		return (0);
-	while (lst->next)
-		lst = lst->next;
-	return (lst);
 }
-
-void set_export();
-void print_export();
-
-void    exec_export(env_list *env, )

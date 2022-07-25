@@ -10,6 +10,6 @@ void    builtins_echo(char **arg)
         printf("%s ", arg[i]);
         i++;
     }
-    if (ft_strncmp(arg[0], "-n"))
+    if (ft_strncmp(arg[0], "-n", 2))
         printf("\n");
 }
