@@ -63,15 +63,17 @@ void	lexing(char *line, t_token *token)
 	int x;
 	int y;
 	char **args;
-	t_redirection *red;
-	t_parser		*parse;
+	t_redirection **red;
+	t_parser		**parse;
+		t_parser		*p;
+
 
 	x = 0;
 	i = 0;
 	y = 0;
 	lexer = init_lexer(line);
 	red = malloc (sizeof(t_redirection ) * 20);
-	parse = malloc (sizeof(t_parse) * lexer->nb_pipe);
+	parse = malloc (sizeof(t_parse) * 100);
 	if(lexer)
 	{
 		x = 0;
@@ -86,7 +88,7 @@ void	lexing(char *line, t_token *token)
 				x++;
 				i = lexer->nb_args[x];
 				args[y] = NULL;
-				parser_add_back(&parse, new_parse(args[0], args, red));
+				parser_add_back(parse, new_parse(args[0], args, (*red)));
 				free_array(args);
 				y = 0;
 				args = (char **)malloc(sizeof(char *) * i + 1);
@@ -97,15 +99,16 @@ void	lexing(char *line, t_token *token)
 				y++;
 			}
 			if(token->type == TOKEN_REDIN || token->type == TOKEN_REDOUT || token->type == TOKEN_APPEND)
-				red_add_back(&red, new_red(token->type, token->content));
+				red_add_back(red, new_red(token->type, token->content));
 			}
 			args[y] = NULL;
-			parser_add_back(&parse, new_parse(args[0], args, red));
+			parser_add_back(parse, new_parse(args[0], args, (*red)));
 			free_array(args);
-			while (parse)
-			{
-				printf("cmd : %s-- args: %s --", parse->cmd, parse->args[1]);
-				parse = parse->next;
-			}
+			// p = (*parse)->next;
+			// while (p)
+			// {
+			// 	printf("cmd : %s args: %s \n", p->cmd, p->args[1]);
+			// 	p = p->next;
+			// }
 	}
 }

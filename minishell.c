@@ -1,5 +1,7 @@
 #include "inc/header.h"
 #include "inc/lexer.h"
+#include "inc/parser.h"
+
 int main(int ac, char **av, char **env)
 {
 	t_token	token;
