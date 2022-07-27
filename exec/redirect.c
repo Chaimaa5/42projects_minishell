@@ -1,7 +1,4 @@
 #include "../inc/header.h"
-//missing
-void    redirection_in(t_redirection *red);
-void    redirection_out(t_redirection *red);
 
 void    redirection_in_from(t_redirection *red)
 {
