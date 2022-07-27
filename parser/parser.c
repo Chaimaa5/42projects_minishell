@@ -1,62 +1,95 @@
 #include "../inc/header.h"
 #include "../inc/parser.h"
-void    builtins_pwd(void)
-{
-    char buf[250];
 
-    getcwd(buf, sizeof(buf));
-    printf("%s\n", buf);
-}
-
-void    builtins_cd(char *path)
+void free_array(char **args)
 {
-	
-    if (path == NULL || !ft_strncmp(path, "~", 2))
+	int i;
+
+	i = 0;
+	while (args[i])
 	{
-        if(!chdir(getenv("HOME")))
-			printf("cd: HOME not set\n");
+		free(args[i]);
+		i++;
 	}
-	else
-		chdir(path);
+	free(args);
 }
 
-// void	execute(t_token *token)
-// {
-// 	if (!ft_strncmp(token[0].content, "pwd", 3) || !ft_strncmp(token[0].content, "PWD", 3))
-// 		builtins_pwd();
-// 	else if (!ft_strncmp(token[0].content, "cd", 3) || !ft_strncmp(token[0].content, "CD", 3))
-// 		builtins_cd(token[1].content);
-// }
-
-void start_parse(t_token *token)
+int *arg_in_pipe(t_lexer *lexer, t_token *token)
 {
-	if (token[0].type == TOKEN_STR)
-		printf("success\n");
+	int *args_in_pipe;
+	int i;
+	int x;
+
+	i = 0;
+	x = 0;
+	args_in_pipe = malloc(sizeof(int) * lexer->nb_pipe);
+	while(lexer->c)
+	{
+		token = get_next_token(lexer);
+		i++;
+		if(token->type == TOKEN_REDIN || token->type == TOKEN_REDOUT
+			|| token->type == TOKEN_HEREDOC || token->type == TOKEN_APPEND)
+			i -= 2;
+		if (lexer->nb_pipe == 1)
+			args_in_pipe[x] = i;
+		if(token->type == TOKEN_PIPE || lexer->c == '\0') 
+		{
+			if (token->type == TOKEN_PIPE)
+				i--;
+			args_in_pipe[x] = i;
+			i = 0;
+			x++;
+		}
+	}
+	return (args_in_pipe);
 }
 
 void	lexing(char *line, t_token *token)
 {
 	t_lexer		*lexer;
-	t_token		*tokens = malloc(sizeof(t_token *) * 10);
-	int			i;
+	t_lexer		*lexers;
+	t_redirection	**red;
+	int i;
+	int x;
+	int y;
+	char **args;
+	int *args_in_pipe;
 
-	i = -1;
+	x = 0;
+	i = 0;
+	y = 0;
 	lexer = init_lexer(line);
+	lexers = init_lexer(line);
+	red = malloc(sizeof(t_redirection) * 100);
 	if(lexer)
 	{
-		while(lexer->c != '\0')
+		args_in_pipe = arg_in_pipe(lexer, token);
+		x = 0;
+		i = 0;
+		i = args_in_pipe[x];
+		args = (char **)malloc(sizeof(char *) * i + 1);
+		while(lexers->c)
 		{
-			token = get_next_token(lexer);
-			if (!ft_strncmp(token->content, "cd", 3) || !ft_strncmp(token->content, "CD", 3))
-				builtins_cd(get_next_token(lexer)->content);
-			else if (!ft_strncmp(token[0].content, "pwd", 3) || !ft_strncmp(token[0].content, "PWD", 3))
-				builtins_pwd();
-			if (token->type != TOKEN_PIPE)
-				tokens[++i] = (*token);
-			else
-				start_parse(tokens);
+			token = get_next_token(lexers);
+			i = args_in_pipe[x];
+			if(token->type == TOKEN_PIPE)
+			{
+				x++;
+				i = args_in_pipe[x];
+				args[y] = NULL;
+				free_array(args);
+				y = 0;
+				args = (char **)malloc(sizeof(char *) * i + 1);
+			}
+			if(token->type == TOKEN_STR)
+			{
+				args[y] = token->content;
+				y++;
+			}
+			if(token->type == TOKEN_REDOUT || token->type == TOKEN_REDIN || token->type == TOKEN_APPEND)
+				red_add_back(red, new_red(token->type, token->content));
 		}
-		lexer_advance(lexer);
+		args[y] = NULL;
 	}
 }
 

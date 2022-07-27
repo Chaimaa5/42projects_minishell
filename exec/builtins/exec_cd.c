@@ -9,8 +9,6 @@ void    exec_cd(char *path)
 			printf("cd: HOME not set\n");
 	}
 	else
-	{
 		chdir(path);
-	    replace_value(env, "PWD", path);
-	}
+		//another case missing
 }

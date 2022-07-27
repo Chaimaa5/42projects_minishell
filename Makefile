@@ -1,7 +1,7 @@
 NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -lreadline
-SRC = exec/builtins/exec_env.c
+SRC = minishell.c lexer/lexer.c lexer/tokenizer.c parser/parser.c parser/redirections.c
 LIB = libft.a
 
 # This is a minimal set of ANSI/VT100 color codes
@@ -28,7 +28,7 @@ clean:
 	@echo "${_BOLD}${_RED}---------Cleaning Objects---------${_END}"
 	rm -rf $(OBJ)
 	rm -rf libft/*.o
-fclean:
+fclean: clean
 	@echo "${_BOLD}${_RED}---------Deleting---------${_END}"
 	rm -rf $(NAME)
 	rm -rf $(LIB)

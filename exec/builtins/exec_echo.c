@@ -12,4 +12,5 @@ void    builtins_echo(char **arg)
     }
     if (ft_strncmp(arg[0], "-n", 2))
         printf("\n");
+        //variables
 }

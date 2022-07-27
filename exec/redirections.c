@@ -1,22 +1,33 @@
 #include "../inc/header.h"
+//missing
+void    redirection_in(t_redirection *red);
+void    redirection_out(t_redirection *red);
 
-void    redirections(int red, char **arg)
+void    redirection_in_from(t_redirection *red)
 {
-    int fd;
+    int input;
 
-    if (red == 1)
-    {
-        fd = open(arg[3], O_RDONLY);
-        dup2(fd, STDIN_FILENO);
-        close(fd);
-        execvp(arg[1], arg);
-    }
-    else if (red == 2)
-    {
-        fd = open(arg[4], O_WRONLY);
-        dup2(fd, STDOUT_FILENO);
-        close(fd);
-        execvp(arg[1], arg);
-    }
+    input = open(red->file, O_RDONLY, 0777);
+    dup2(input, STDOUT_FILENO);
+    close(input);
+    //handle errors
 }
 
+void    redirection_out_to(t_redirection *red)
+{
+    int output;
+
+    if (red->type == REDOUT)
+    {
+        output = open(red->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+        dup2(output, STDOUT_FILENO);
+        close(output);
+    }
+    else if (red->type == APPEND)
+    {
+        output = open(red->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
+        dup2(output, STDOUT_FILENO);
+        close(output);
+    }
+    //handle errors
+}

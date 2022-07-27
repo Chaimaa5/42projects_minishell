@@ -34,6 +34,7 @@ void    replace_value(env_list  *env, char *key, char *value)
     }
 }
 
+//add str to value
 void    print_export(env_list *env)
 {
 	env_list *list;
