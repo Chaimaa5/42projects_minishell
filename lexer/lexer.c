@@ -141,7 +141,7 @@ t_lexer *init_lexer(char *line)
 	lexer->pos = 0;
 	lexer->cunt_arg = 0;
 	lexer->nb_pipe = ft_count_pipe(lexer->line);
-	lexer->nb_args = (int *)malloc(sizeof(int) * lexer->nb_pipe + 1);
+	lexer->nb_args = (int *)malloc(sizeof(int) * lexer->nb_pipe);
 	lexer->c = lexer->line[lexer->pos];
 	lexer->x = 0;
 	return (lexer);
