@@ -16,7 +16,7 @@ void free_array(char **args)
 }
 
 
-t_parser	**lexing(char *line, t_token *token)
+void	lexing(char *line, t_token *token)
 {
 	t_lexer		*lexer;
 	int x;
@@ -28,12 +28,14 @@ t_parser	**lexing(char *line, t_token *token)
 
 	x = 0;
 	y = 0;
+	int i = 0;
 	lexer = init_lexer(line);
 	red = malloc (sizeof(t_redirection ) * 100);
 	parse = malloc (sizeof(t_parser) * 100);
 	if(lexer)
 	{
 		x = 0;
+		i = 0;
 		args = (char **)malloc(sizeof(char *) * 10);
 		while(lexer->c)
 		{
@@ -43,9 +45,21 @@ t_parser	**lexing(char *line, t_token *token)
 				x++;
 				args[y] = NULL;
 				parser_add_back(parse, new_parse(args[0], args, red));
+				while ((*parse)->args[i])
+				{
+				printf("cmd %s \n", (*parse)->cmd);
+					printf("-----  %s\n",  (*parse)->args[i]);
+					i++;
+				}
+				while ((*parse)->red->next)
+				{
+					printf("%i  %s\n",  (*parse)->red->next->type, (*parse)->red->next->file);
+					(*parse)->red = (*parse)->red->next;
+				}
 				free_array(args);
 				y = 0;
 				args = (char **)malloc(sizeof(char *) * 10);
+				i = 0;
 			}
 			if(token->type == TOKEN_STR)
 			{
@@ -59,6 +73,4 @@ t_parser	**lexing(char *line, t_token *token)
 			parser_add_back(parse, new_parse(args[0], args, red));
 			free_array(args);		
 	}
-	execute(parse);
-	return (parse);
 }

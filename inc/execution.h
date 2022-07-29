@@ -36,4 +36,6 @@ int     check_key(env_list **env, char *key);
 void    delete_env(env_list **env,  char *key);
 
 
+void	execute(t_parser **parse);
+
 #endif

@@ -4,7 +4,7 @@
 
 int main(int ac, char **av, char **env)
 {
-	t_token	token;
+	t_token		token;
 
 	char *line;
 	(void) ac;
