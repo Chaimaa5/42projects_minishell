@@ -54,11 +54,11 @@ t_parser	**lexing(char *line, t_token *token)
 			}
 			if(token->type == TOKEN_REDIN || token->type == TOKEN_REDOUT || token->type == TOKEN_APPEND)
 				red_add_back(&red, new_red(token->type, token->content));
-			}
-			args[y] = NULL;
-			parser_add_back(parse, new_parse(args[0], args, red));
-			free_array(args);		
+		}
+		args[y] = NULL;
+		parser_add_back(parse, new_parse(args[0], args, red));
+		exec_builtins(parse);
+		free_array(args);		
 	}
-	execute(parse);
 	return (parse);
 }

@@ -42,7 +42,6 @@ void	red_add_back(t_redirection **lst, t_redirection *new)
 		list = red_last(*lst);
 		list->next = new;
 	}
-
 }
 
 void	red_add_front(t_redirection **lst, t_redirection *new)

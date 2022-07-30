@@ -12,7 +12,7 @@ typedef struct  env_list
 //builtins
 void    exec_cd(char *path);
 void    exec_echo(char **arg);
-void    execute_env(env_list *env, char **envp);
+void    exec_env(env_list *env, char **envp);
 void    exec_exit(char *arg);
 void    exec_export(env_list *env, char **args);
 void    exec_pwd(void);
@@ -36,6 +36,6 @@ int     check_key(env_list **env, char *key);
 void    delete_env(env_list **env,  char *key);
 
 
-void	execute(t_parser **parse);
+void	exec_builtins(t_parser **parse);
 
 #endif

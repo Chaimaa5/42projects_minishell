@@ -54,7 +54,7 @@ env_list    **read_env(char **envp)
 }
 
 
-void    execute_env(env_list *env, char **envp)
+void    exec_env(env_list *env, char **envp)
 {
     char        **tmp;
     int         i;
