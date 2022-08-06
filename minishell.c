@@ -2,9 +2,29 @@
 #include "inc/lexer.h"
 #include "inc/parser.h"
 
-int main(int ac, char **av, char **env)
+int ft_count_elems(char **str)
+{
+	int i;
+
+	i = 0;
+	while(str[i])
+		i++;
+	return (i);
+}
+
+
+
+void ft_2d(char **str)
+{
+	int i = 0;
+	while(str[i])
+		printf("%s <<\n", str[i++]);
+}
+int main(int ac, char **av, char **envp)
 {
 	t_token		token;
+	env_list	env;
+
 
 	char *line;
 	(void) ac;
@@ -14,7 +34,7 @@ int main(int ac, char **av, char **env)
 	{
 		line = readline("minishell: ");
 		if(ft_syntax_error(line))
-			lexing(line, &token);
+			lexing(line, &token, envp);
 		else
 			printf("SYNTAX ERROR\n");
 	}
