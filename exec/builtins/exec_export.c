@@ -52,14 +52,9 @@ void    print_export(env_list *env)
 	}
 }
 
-void    exec_export(env_list *env, char **args)
+void    exec_export(env_list *env, t_parser *parse)
 {
-    int i;
-
-    i = 0;
-    while (*args)
-        i++;
-    if (i <= 1)
+    if (!parse->args[1])
         print_export(env);
     else
         set_env(env, args);

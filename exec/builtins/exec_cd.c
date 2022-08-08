@@ -11,7 +11,7 @@ void    exec_cd(char *path)
 	else
 	{
 		if (chdir(path))
-			perror("cd ");
+			perror("cd: ");
 	}
 		//another case missing
 }

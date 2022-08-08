@@ -1,41 +1,34 @@
   #include "../inc/header.h"
 
-void	free_array(char **array)
+
+char	**find_path(char **envp)
+{
+	int		i;
+	char	**env_path;
+	char	**paths;
+
+	i = find_path_env(envp, "PATH=");
+	env_path = ft_split(envp[i], '=');
+	paths = ft_split(env_path[1], ':');
+	free_array(env_path);
+	return (paths);
+}
+
+int	find_path_env(char **envp, char *path)
 {
 	int	i;
 
 	i = 0;
-	while (array[i])
+	while (envp[i])
 	{
-		free(array[i]);
+		if (!ft_strncmp(envp[i], path, 5))
+			return (i);
 		i++;
 	}
-	free(array);
+	return (0);
 }
 
-char	**find_path(env_list *env)
-{
-	char	**paths;
-
-	paths = ft_split(find_path_env(env, "PATH="), ':');
-	return (paths);
-}
-
-char *find_path_env(env_list *env, char *path)
-{
-	env_list *temp;
-
-	temp = env;
-	while (temp)
-	{
-		if (!ft_strncmp(temp->key, path, 5))
-			return (temp->content);
-		temp = temp->next;
-	}
-	return (NULL);
-}
-
-char	*search(env_list *env, char *cmd)
+char	*search(char **envp, char *cmd)
 {
 	int		i;
 	char	**paths;
@@ -43,7 +36,7 @@ char	*search(env_list *env, char *cmd)
 	char	*x2;
 
 	i = 0;
-	paths = find_path(env);
+	paths = find_path(envp);
 	while (paths[i])
 	{
 		x2 = ft_strjoin(paths[i], "/");
