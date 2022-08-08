@@ -48,19 +48,6 @@ void	parser_add_back(t_parser **alst, t_parser *new)
 		n->next = new;
 	}
 }
-// void	parser_add_back(t_parser **lst, t_parser *new)
-// {
-// 	t_parser	*list;
-
-// 	list = *lst;
-// 	if (!*lst)
-// 		*lst = new;
-// 	else
-// 	{
-// 		list = parser_last(lst);
-// 		list->next = new;
-// 	}
-// }
 
 void	parser_add_front(t_parser **lst, t_parser *new)
 {

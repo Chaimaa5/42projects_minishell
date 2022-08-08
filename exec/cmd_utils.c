@@ -1,4 +1,4 @@
-  #include "../inc/header.h"
+#include "../inc/header.h"
 
 void	check_acess(char *path)
 {

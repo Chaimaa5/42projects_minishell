@@ -46,10 +46,12 @@ int check_pipe(char *line)
 {
 	int i; 
 	i = 0;
-	if(line[0] == '|')
-		return(0);
-	if(line[ft_strlen(line)-1] == '|')
+	if(line[0] && line[ft_strlen(line) - 1] == '|')
 			return(0);
+	while(line[i] == ' ')
+		i++;
+	if(line[i] == '|')
+		return(0);
 	while(line[i])
 	{
 		if (line[i] == '|' && line[i + 1] == '|')
@@ -119,18 +121,6 @@ int ft_syntax_error(char *line)
 		return(1);
 }
 
-int ft_count_pipe(char *line)
-{
-	int i;
-	int x;
-	i = -1;
-	x = 1;
-	while(line[++i])
-		if(line[i] == '|')
-			x++;
-	return(x);
-}
-
 t_lexer *init_lexer(char *line)
 {
 	t_lexer *lexer;
@@ -139,12 +129,8 @@ t_lexer *init_lexer(char *line)
 	add_history(line);
 	lexer->line = line;
 	lexer->pos = 0;
-	lexer->cunt_arg = 0;
-	lexer->nb_pipe = ft_count_pipe(lexer->line);
-	lexer->nb_args = (int *)malloc(sizeof(int) * lexer->nb_pipe);
-	lexer->nb_args[lexer->nb_pipe] = 0;
+	lexer->nb_pipe = 1;
 	lexer->c = lexer->line[lexer->pos];
-	lexer->x = 0;
 	return (lexer);
 }
 
@@ -199,7 +185,6 @@ t_token *collect_string_sngl(t_lexer *lexer)
 		lexer_advance(lexer);
 		if(lexer->c == '"' && lexer->c == '\'' && lexer->c != '\0')
 			lexer_advance(lexer);
-		lexer->cunt_arg += 1;
 	}
 	lexer_advance(lexer);
 	return(init_token(TOKEN_STR, value));
@@ -222,8 +207,6 @@ t_token *collect_red(t_lexer *lexer, int i)
 		if(lexer->c == '"' && lexer->c == '\'')
 			lexer_advance(lexer);
 	}
-	while (lexer->c == ' ')
-		lexer_advance(lexer); 
 	return(init_token(i, value));
 }
 
@@ -251,7 +234,7 @@ t_token *collect_apn_hrd(t_lexer *lexer, int i)
 
 t_token *get_next_token(t_lexer *lexer)
 {
-	while (lexer->c != '\0' && lexer->pos < ft_strlen(lexer->line))
+	while (lexer->c != '\0')
 	{
 		if (lexer->c == ' ')
 			lexer_skip_whitespaces(lexer);
@@ -261,7 +244,7 @@ t_token *get_next_token(t_lexer *lexer)
 			return (collect_string_sngl(lexer));
 		else if (lexer->c == '|')
 		{
-			lexer->x += 1; 
+			lexer->nb_pipe += 1;
 			return (advance_token(lexer, init_token(TOKEN_PIPE, get_char_as_string(lexer))));
 		}
 		else if (lexer->c == '<' )
@@ -271,7 +254,7 @@ t_token *get_next_token(t_lexer *lexer)
 				return(collect_apn_hrd(lexer, TOKEN_HEREDOC));
 			return (collect_red(lexer, TOKEN_REDIN));
 		}
-		else if (lexer->c == '>' )
+		else if (lexer->c == '>')
 		{
 			lexer_advance(lexer);
 			if(lexer->c == '>')
@@ -279,11 +262,10 @@ t_token *get_next_token(t_lexer *lexer)
 			return (collect_red(lexer, TOKEN_REDOUT));
 		}
 		else
-		{
-			lexer->nb_args[lexer->x] += 1;
 			return (collect_cmd(lexer));
-		}
 	}
+	if(!lexer->c)
+		return(init_token(TOKEN_NULL, NULL));
 	return (NULL);
 }
 
@@ -303,17 +285,14 @@ t_token *collect_string(t_lexer *lexer)
 		lexer_advance(lexer);
 		if(lexer->c == '"' && lexer->c == '\'' && lexer->c == ' ' && lexer->c != '\0')
 			lexer_advance(lexer);
-		lexer->cunt_arg += 1;
 	}
 	lexer_advance(lexer);
-	//free(s);
 	return(init_token(TOKEN_STR, value));
 }
 
 char *get_char_as_string(t_lexer *lexer)
 {
 	char *str;
-
 	str = malloc(2);
 	str[0] = lexer->c;
 	str[1] = '\0';

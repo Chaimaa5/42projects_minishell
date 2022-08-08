@@ -2,7 +2,7 @@
 
 void set_export(env_list *env,  char *line)
 {
-    char    *tmp;
+    char    **tmp;
     
     if (!check_key(line))
     {
@@ -18,14 +18,14 @@ void set_export(env_list *env,  char *line)
             env_add_back(&env, new_env(tmp[0], NULL, NULL));
         }
     else
-        printf("key should start with an alphabet and contain alphanumerics in the middle\n")
+        printf("key should start with an alphabet and contain alphanumerics in the middle\n");
 }
 
 void    replace_value(env_list  *env, char *key, char *value)
 {
     env_list *tmp;
 
-    tmp = (*env);
+    tmp = env;
     while (tmp)
     {
         if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
@@ -54,6 +54,9 @@ void    print_export(env_list *env)
 
 void    exec_export(env_list *env, char **args)
 {
+    int i;
+
+    i = 0;
     while (*args)
         i++;
     if (i <= 1)
