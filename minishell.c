@@ -23,8 +23,7 @@ void ft_2d(char **str)
 int main(int ac, char **av, char **envp)
 {
 	t_token		token;
-	env_list	env;
-	t_parser	parse;
+	t_parser	*parse;
 
 	char *line;
 	(void) ac;
@@ -33,11 +32,10 @@ int main(int ac, char **av, char **envp)
 	{
 		line = readline("minishell: ");
 		if(ft_syntax_error(line))
-			lexing(line, &token);
+			parse = lexing(line, &token);
 		else
 			printf("SYNTAX ERROR\n");
-		env_builder(&env, envp);
-		execute(&parse, &env);
+		execute(parse, envp);
 	}
 	return (0);
 }

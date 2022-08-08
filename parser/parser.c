@@ -45,47 +45,43 @@ char **add_args_to_list(char **args, t_token *token)
 	return (new_args);
 }
 
-// void add_parse(t_parser *parse, char *cmd, char **args)
-// {
-// 	t_parser *tmp;
+t_parser *add_parse(t_parser *parse, t_token *token, char c, t_vr_tools *tools)
+{
+	t_parser *tmp;
+	
+	if(token->type == TOKEN_STR)
+	{
+		if(!tools->cmd)
+			tools->cmd = ft_strdup(token->content);
+		tools->args = add_args_to_list(tools->args , token);
+	}
+	if(token->type == TOKEN_PIPE || !c)
+	{
+		tmp = new_parse(tools->cmd , tools->args);
+		parser_add_back(&parse, tmp);
+		tools->cmd = NULL;
+		tools->args = NULL;
+	}
+	return(parse);
+}
 
-// }
-
-void lexing(char *line, t_token *token)
+t_parser *lexing(char *line, t_token *token)
 {
 	t_lexer *lexer;
 	t_parser *parse;
-	t_parser *tmp;
-	char *cmd;
-	char **arg;
-	cmd = NULL;
-	arg = NULL;
+	t_vr_tools tools;
+
 	parse = NULL;
-	
+	tools.cmd = NULL;
+	tools.args = NULL;
 	lexer = init_lexer(line);
 	if(lexer)
 	{
 		while (lexer->c)
 		{
 			token = get_next_token(lexer);
-			if(token->type == TOKEN_STR)
-			{
-				if(!cmd)
-					cmd = ft_strdup(token->content);
-				arg = add_args_to_list(arg , token);
-			}
-			else if (token->type == TOKEN_PIPE)
-			{
-				tmp = new_parse(cmd , arg);
-				parser_add_back(&parse, tmp);
-				cmd = NULL;
-				arg = NULL;
-			}
-		}
-		if(!lexer->c)
-		{
-			tmp = new_parse(cmd , arg);
-			parser_add_back(&parse, tmp);
+			parse = add_parse(parse, token, lexer->c, &tools);
 		}
 	}
+	return (parse);
 }

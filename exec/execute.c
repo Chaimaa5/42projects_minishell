@@ -1,7 +1,7 @@
 #include "../inc/header.h"
 #include "../inc/execution.h"
 
-void	exec_builtins(t_parser **parse, env_list *env)
+void	exec_builtins(t_parser **parse, char	**envp)
 {
     // if (!ft_strncmp((*parse)->cmd, "cd", 3))
     //     exec_cd((*parse)->args[1]);
@@ -12,7 +12,7 @@ void	exec_builtins(t_parser **parse, env_list *env)
     // else if (!ft_strncmp((*parse)->cmd, "unset", 7))
     //     exec_unset(env, parse);
     if (!ft_strncmp((*parse)->cmd, "env", 4))
-        exec_env(env);
+        exec_env((*parse), envp);
 }
 
 // execute_last_cmd()
@@ -55,9 +55,9 @@ void	exec_builtins(t_parser **parse, env_list *env)
 // 	}
 // }
 
-void    execute(t_parser *parser, env_list *env)
+void    execute(t_parser *parser, char **envp)
 {
-    exec_builtins(&parser, env);
+    exec_builtins(&parser, envp);
 }
 
 

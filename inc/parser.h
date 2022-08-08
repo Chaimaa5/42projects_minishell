@@ -16,6 +16,12 @@ typedef struct s_redirection
     struct s_redirection *next;
 } t_redirection;
 
+typedef struct s_vr_tools
+{
+    char *cmd;
+    char **args;
+}   t_vr_tools;
+
 //redirections
 t_redirection	*new_red(int type, char *file);
 int             red_size(t_redirection *lst);
@@ -30,7 +36,7 @@ int	parse_size(t_parser *lst);
 void	parser_add_back(t_parser **lst, t_parser *new);
 void	parser_add_front(t_parser **lst, t_parser *new);
 t_parser	*parser_last(t_parser **lst);
-void lexing(char *line, t_token *token);
+t_parser *lexing(char *line, t_token *token);
 
 
 #endif
