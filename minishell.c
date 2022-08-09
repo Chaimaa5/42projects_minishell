@@ -31,10 +31,7 @@ int main(int ac, char **av, char **envp)
 	while ("everything is okey")
 	{
 		line = readline("minishell: ");
-		if(ft_syntax_error(line))
-			parse = lexing(line, &token);
-		else
-			printf("SYNTAX ERROR\n");
+		parse = lexing(line, &token);
 		execute(parse, envp);
 	}
 	return (0);

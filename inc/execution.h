@@ -1,8 +1,8 @@
 #ifndef EXECUTIONS_H
 #define EXECUTIONS_H
 
-#define WRITE 1;
-#define  READ 0;
+#define WRITE 1
+#define  READ 0
 
 typedef struct  env_list
 {
