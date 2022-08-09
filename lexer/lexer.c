@@ -91,7 +91,7 @@ int check_red(char *line)
 	i = 0;
 	while(line[i])
 	{
-		if (line[i] == '<' || line[i] == '>')
+		if ((line[i] == '<' || line[i] == '>') && (line[i - 1] != '\'' && line[i - 1] != '"'))
 		{
 			i++;
 			if(!line[i] || !line[i + 1])
@@ -126,11 +126,10 @@ t_lexer *init_lexer(char *line)
 	t_lexer *lexer;
 
 	lexer = malloc(sizeof(t_lexer));
-	add_history(line);
 	lexer->line = line;
 	lexer->pos = 0;
-	lexer->nb_pipe = 1;
 	lexer->c = lexer->line[lexer->pos];
+	lexer->nb_pipe = 1;
 	return (lexer);
 }
 
@@ -158,14 +157,12 @@ t_token *collect_cmd(t_lexer *lexer)
 	value[0] = '\0';
 	while (lexer->c != ' ' && lexer->c != '\0' && lexer->c != '|' && lexer->c != '>' && lexer->c != '<')
 	{
-		if(lexer->c == '"' || lexer->c == '\'')
-			lexer_advance(lexer);
 		s = get_char_as_string(lexer);
 		value = ft_strjoin(value, s);
 		lexer_advance(lexer);
+		if(lexer->c == '"' || lexer->c == '\'')
+			lexer_advance(lexer);
 	}
-	while(lexer->c == ' ')
-		lexer_advance(lexer);
 	return(init_token(TOKEN_STR, value));
 }
 
@@ -264,9 +261,7 @@ t_token *get_next_token(t_lexer *lexer)
 		else
 			return (collect_cmd(lexer));
 	}
-	if(!lexer->c)
-		return(init_token(TOKEN_NULL, NULL));
-	return (NULL);
+	return(init_token(TOKEN_NULL, NULL));
 }
 
 t_token *collect_string(t_lexer *lexer)
@@ -276,14 +271,14 @@ t_token *collect_string(t_lexer *lexer)
 
 	value = malloc(1);
 	value[0] = '\0';
-	if (lexer->c == '"')
+	while (lexer->c == '"')
 		lexer_advance(lexer);
 	while (lexer->c != '"' && lexer->c != '\0')
 	{
 		s = get_char_as_string(lexer);
 		value = ft_strjoin(value, s);
 		lexer_advance(lexer);
-		if(lexer->c == '"' && lexer->c == '\'' && lexer->c == ' ' && lexer->c != '\0')
+		while(lexer->c == '"' && lexer->c != '\0' && lexer->c == ' ')
 			lexer_advance(lexer);
 	}
 	lexer_advance(lexer);

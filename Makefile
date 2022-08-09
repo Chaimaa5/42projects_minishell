@@ -34,5 +34,7 @@ fclean: clean
 	rm -rf $(NAME)
 	rm -rf $(LIB)
 	rm -rf libft/libft.a
+	rm -rf minishell.dSYM
+
 
 re: fclean all

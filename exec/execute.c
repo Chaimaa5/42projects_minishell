@@ -15,18 +15,23 @@ void	exec_builtins(t_parser **parse, char	**envp)
         exec_env((*parse), envp);
 }
 
-void execute_last_cmd(t_parser *parser, env_list *env, int write_in)
+void execute_last_cmd(t_parser *parser, env_list *env, int write_in, int *end)
 {
 	char	*path;
 	char	**envp;
 	int pid;
+	int status;
 
 	envp = env_list_to_char(&env);
 	path = search(envp, parser->cmd);
 	pid = fork();
-	wait(0);
-	dup2(write_in, STDIN_FILENO);
-	close(write_in);
+	waitpid(pid, &status, 0);
+	if (write_in != 0)
+	{
+		dup2(write_in, STDIN_FILENO);
+		close(write_in);
+	}
+	close(end[WRITE]);
 	if (pid == 0)
 	{
 		if (execve(path, parser->args, envp) == -1)
@@ -35,18 +40,20 @@ void execute_last_cmd(t_parser *parser, env_list *env, int write_in)
 	}
 }
 
-void	launch_child(t_parser *parser, env_list *env, int *end)
+void	launch_child(t_parser *parser, env_list *env, int write_in, int *end)
 {
 	char	*path;
 	char	**envp;
 	envp = env_list_to_char(&env);
 	path = search(envp, parser->cmd);
-	wait(0);
+	if (write_in != 0)
+	{
+		dup2(write_in, STDIN_FILENO);
+		close(write_in);
+	}
 	dup2(end[WRITE], STDOUT_FILENO);
-	close(end[READ]);
 	if (execve(path, parser->args, envp) == -1)
 		printf("command not found: %s \n", parser->cmd);
-	close(end[WRITE]);
 }
 
 void    execute(t_parser *parser, char **envp)
@@ -55,6 +62,7 @@ void    execute(t_parser *parser, char **envp)
 	env_list *env;
 	int end[2];
 	int	write_in;
+	int status;
 
 	write_in = 0;
 	env = env_builder(envp);
@@ -63,12 +71,15 @@ void    execute(t_parser *parser, char **envp)
 	{
 		pid = fork();
 		if (pid == 0)
-			launch_child(parser, env, end);
+			launch_child(parser, env, write_in, end);
+		else
+			waitpid(pid, &status, 0);
 		write_in = end[READ];
-			close(write_in);
+		close(end[WRITE]);
 		parser = parser->next;
+
 	}
-	execute_last_cmd(parser, env, write_in);
+	execute_last_cmd(parser, env, write_in, end);
 }
 
 
