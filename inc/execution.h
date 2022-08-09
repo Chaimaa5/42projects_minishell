@@ -1,6 +1,9 @@
 #ifndef EXECUTIONS_H
 #define EXECUTIONS_H
 
+#define WRITE 1;
+#define  READ 0;
+
 typedef struct  env_list
 {
     char            *key;
@@ -8,9 +11,6 @@ typedef struct  env_list
     char            *separator;
     struct env_list *next;    
 }   env_list;
-
-
-
 
 //builtins
 void    exec_cd(char *path);
@@ -48,7 +48,7 @@ void    execute(t_parser *parser, char **envp);
 
 char	*search(char **env, char *cmd);
 char	**find_path(char **envp);
-int	find_path_env(char **envp, char *path);
+int	    find_path_env(char **envp, char *path);
 void	free_array(char **array);
 
 #endif

@@ -19,13 +19,17 @@ void execute_last_cmd(t_parser *parser, env_list *env)
 {
 	char	*path;
 	char	**envp;
+	int pid;
 
 	envp = env_list_to_char(&env);
 	path = search(envp, parser->cmd);
-	if (execve(path, parser->args, envp) == -1)
+	pid = fork();
+	wait(0);
+	if (pid == 0)
 	{
-		ft_putstr_fd("command not found:", 2);
-		ft_putstr_fd(parser->cmd, 2);
+		if (execve(path, parser->args, envp) == -1)
+			printf("command not found: %s \n", parser->cmd);
+		exit(0);
 	}
 }
 
@@ -33,16 +37,12 @@ void	launch_child(t_parser *parser, env_list *env, int *end)
 {
 	char	*path;
 	char	**envp;
-
 	envp = env_list_to_char(&env);
 	path = search(envp, parser->cmd);
 	dup2(end[1], STDOUT_FILENO);
 	close(end[0]);
 	if (execve(path, parser->args, envp) == -1)
-	{
-		ft_putstr_fd("command not found:", 2);
-		ft_putstr_fd(parser->cmd, 2);
-	}
+		printf("command not found: %s \n", parser->cmd);
 }
 
 void    execute(t_parser *parser, char **envp)
@@ -58,6 +58,7 @@ void    execute(t_parser *parser, char **envp)
 		pid = fork();
 		if (pid == 0)
 			launch_child(parser, env, end);
+		
 		parser = parser->next;
 	}
 	execute_last_cmd(parser, env);
