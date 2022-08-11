@@ -31,10 +31,9 @@ int main(int ac, char **av, char **envp)
 	while ("everything is okey")
 	{
 		line = readline("minishell: ");
-		printf("%s\n", line);
 		add_history(line);
 		parse = lexing(line, &token);
-		execute(parse, envp);
+		pipeline_execution(parse, envp);
 	}
 	return (0);
 }
