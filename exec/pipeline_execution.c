@@ -1,6 +1,16 @@
 #include "../inc/header.h"
 #include "../inc/execution.h"
 
+int		check_builtin(t_parser *parser)
+{
+	if (!ft_strncmp(parser->cmd, "cd", 3))
+		return (1);
+	else if (!ft_strncmp(parser->cmd, "pwd", 4))
+		return (1);
+	else if (!ft_strncmp(parser->cmd, "pwd", 4))
+		return (1);
+	return (0);
+}
 void	exec_builtins(t_parser **parse, char	**envp)
 {
     if (!ft_strncmp((*parse)->cmd, "cd", 3))
@@ -13,6 +23,14 @@ void	exec_builtins(t_parser **parse, char	**envp)
     //     exec_unset(env, parse);
     if (!ft_strncmp((*parse)->cmd, "env", 4))
         exec_env((*parse), envp);
+}
+
+void 	execute(t_parser *parser, char *path, char **envp)
+{
+	// if (check_builtin(path))
+	// 	exec_builtins(parser, envp);
+	if (execve(path, parser->args, envp) == -1)
+		printf("command not found: %s \n", parser->cmd);
 }
 
 void execute_last_cmd(t_parser *parser, env_list *env, int write_in)
@@ -33,11 +51,9 @@ void execute_last_cmd(t_parser *parser, env_list *env, int write_in)
 			dup2(write_in, STDIN_FILENO);
 			close(write_in);
 		}
-		if (execve(path, parser->args, envp) == -1)
-			printf("command not found: %s \n", parser->cmd);
+		execute(parser, path, envp);
 	}
 }
-
 void	launch_child(t_parser *parser, env_list *env, int write_in, int *end)
 {
 	char	*path;
@@ -51,8 +67,7 @@ void	launch_child(t_parser *parser, env_list *env, int write_in, int *end)
 	}
 	dup2(end[WRITE], STDOUT_FILENO);
 	close(end[WRITE]);
-	if (execve(path, parser->args, envp) == -1)
-		printf("command not found: %s \n", parser->cmd);
+	execute(parser, path, envp);
 }
 
 void    pipeline_execution(t_parser *parser, char **envp)
