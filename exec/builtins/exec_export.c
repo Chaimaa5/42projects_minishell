@@ -2,9 +2,9 @@
 
 void set_export(env_list *env,  char *line)
 {
-    char    **tmp;
+    char    **tmp = NULL;
     
-    if (!check_key(line))
+    if (!check_key(&env, line))
     {
         if (!ft_strchr(line, '='))
         {
@@ -52,10 +52,10 @@ void    print_export(env_list *env)
 	}
 }
 
-void    exec_export(env_list *env, t_parser *parse)
+void    exec_export(env_list **env, t_parser *parse)
 {
     if (!parse->args[1])
-        print_export(env);
+        print_export((*env));
     else
-        set_env(env, args);
+        set_export((*env), parse->args[1]);
 }
