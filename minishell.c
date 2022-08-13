@@ -33,7 +33,8 @@ int main(int ac, char **av, char **envp)
 		line = readline("minishell: ");
 		add_history(line);
 		parse = lexing(line, &token);
-		pipeline_execution(parse, envp);
+		if(parse)
+			pipeline_execution(parse, envp);
 	}
 	return (0);
 }

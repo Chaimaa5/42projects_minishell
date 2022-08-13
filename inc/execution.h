@@ -45,6 +45,7 @@ int     ft_count_elems(char **str);
 
 void	exec_builtins(t_parser **parse, char	**envp);
 void    pipeline_execution(t_parser *parser, char **envp);
+void    redirections(t_redirection *red);
 
 char	*search(char **env, char *cmd);
 char	**find_path(char **envp);

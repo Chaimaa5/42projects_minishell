@@ -11,6 +11,7 @@ int		check_builtin(t_parser *parser)
 		return (1);
 	return (0);
 }
+
 void	exec_builtins(t_parser **parse, char	**envp)
 {
     if (!ft_strncmp((*parse)->cmd, "cd", 3))
@@ -23,14 +24,19 @@ void	exec_builtins(t_parser **parse, char	**envp)
     //     exec_unset(env, parse);
     if (!ft_strncmp((*parse)->cmd, "env", 4))
         exec_env((*parse), envp);
+	exit(0);
 }
 
 void 	execute(t_parser *parser, char *path, char **envp)
 {
-	// if (check_builtin(path))
-	// 	exec_builtins(parser, envp);
-	if (execve(path, parser->args, envp) == -1)
-		printf("command not found: %s \n", parser->cmd);
+	if (check_builtin(parser))
+		exec_builtins(&parser, envp);
+	else if (execve(path, parser->args, envp) == -1)
+	{
+		ft_putstr_fd("command not found: ", 2);
+		ft_putendl_fd(parser->cmd, 2);
+		exit(127);
+	}
 }
 
 void execute_last_cmd(t_parser *parser, env_list *env, int write_in)
@@ -51,6 +57,7 @@ void execute_last_cmd(t_parser *parser, env_list *env, int write_in)
 			dup2(write_in, STDIN_FILENO);
 			close(write_in);
 		}
+		redirections(parser->red);
 		execute(parser, path, envp);
 	}
 }
@@ -67,6 +74,7 @@ void	launch_child(t_parser *parser, env_list *env, int write_in, int *end)
 	}
 	dup2(end[WRITE], STDOUT_FILENO);
 	close(end[WRITE]);
+	redirections(parser->red);
 	execute(parser, path, envp);
 }
 
