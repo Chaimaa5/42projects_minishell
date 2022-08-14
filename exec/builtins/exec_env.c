@@ -64,6 +64,7 @@ void	env_add_back(env_list **lst, env_list *new)
 			n = n->next;
 		n->next = new;
 	}
+
 }
 
 env_list    **read_env(char **envp)
@@ -100,11 +101,11 @@ env_list    *env_builder(char **envp)
 	return (env);
 }
 
-void exec_env(t_parser *parse, char **envp)
+void exec_env(t_parser *parse, env_list **envp)
 {
 	env_list	*env;
 	
-	env = env_builder(envp);
+	env = *envp;
 	if (parse->args[1])
 	{
 		printf("env: %s: No such file or directory\n", parse->args[1]);
@@ -115,5 +116,4 @@ void exec_env(t_parser *parse, char **envp)
 		printf("%s%s%s\n", env->key, env->separator, env->content);
 		env = env->next;
 	}
-
 }

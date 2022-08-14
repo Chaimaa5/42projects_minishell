@@ -15,9 +15,9 @@ typedef struct  env_list
 //builtins
 void    exec_cd(char *path);
 void    exec_echo(char **arg);
-void    exec_env(t_parser *parse, char **envp);
+void exec_env(t_parser *parse, env_list **envp);
 void    exec_exit(char *arg);
-void    exec_export(env_list **env, t_parser *parse);
+void    exec_export(t_parser *parse, env_list **envp);
 void    exec_pwd(void);
 void    exec_unset(env_list *env, char *key);
 
@@ -32,9 +32,9 @@ env_list    *env_builder(char **envp);
 
 
 //export
-void	set_export(env_list *env,  char *line);
-void	replace_value(env_list  *env, char *key, char *value);
-void    print_export(env_list *env);
+void set_export(env_list *env,  char **args);
+void	replace_value(env_list  **env, char *key, char *value);
+void    print_export(env_list **env);
 
 
 //unset
@@ -43,8 +43,8 @@ void    delete_env(env_list **env,  char *key);
 int     ft_count_elems(char **str);
 
 
-void	exec_builtins(t_parser **parse, char	**envp, env_list *env);
-void    pipeline_execution(t_parser *parser, char **envp);
+void	exec_builtins(t_parser **parse,  env_list *env);
+void    pipeline_execution(t_parser *parser, env_list **envp);
 void    redirections(t_redirection *red);
 
 char	*search(char **env, char *cmd);

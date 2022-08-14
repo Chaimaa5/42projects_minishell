@@ -1,3 +1,7 @@
 cd
 pwd
 env
+
+to do
+export with '_'
+fix cd without exit

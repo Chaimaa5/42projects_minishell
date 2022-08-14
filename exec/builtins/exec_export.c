@@ -1,31 +1,75 @@
 #include "../../inc/header.h"
 
-void set_export(env_list *env,  char *line)
+int     check_export_key(char *key)
 {
-    char    **tmp = NULL;
-    
-    if (!check_key(&env, line))
+    int i;
+
+    i = 1;
+    if (ft_isalpha(key[0]))
     {
-        if (!ft_strchr(line, '='))
+        while(key[i])
         {
-            tmp = ft_split(line, '=');
-            if (!tmp[1])
-                env_add_back(&env, new_env(tmp[0], tmp[1], "="));
-            else
-                env_add_back(&env, new_env(tmp[0], NULL, "="));
+            if (!ft_isalnum(key[i]))
+            {
+                printf("export: %s: not a valid identifier\n", key);
+                return (0);
+            }
+            i++;
         }
-        else
-            env_add_back(&env, new_env(tmp[0], NULL, NULL));
-        }
+    }
     else
-        printf("key should start with an alphabet and contain alphanumerics in the middle\n");
+    {
+        printf("export: %s: event not found\n", key);
+        return (0);
+    }
+    return (1);
 }
 
-void    replace_value(env_list  *env, char *key, char *value)
+env_list	*env_last(env_list *lst)
+{
+	if (!lst)
+		return (0);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
+}
+
+
+void set_export(env_list *env,  char **args)
+{
+    // char    **tmp = NULL;
+    int i;
+    env_list *tmp;
+    i = 1;
+    while(args[i])
+    {
+        if (check_export_key(args[i]))
+        {
+            // if (!ft_strchr(*args, '='))
+            // {
+            //     tmp = ft_split(*args, '=');
+            //     if (!tmp[1])
+            //         env_add_back(&env, new_env(tmp[0], tmp[1], "="));
+            //     else
+            //         env_add_back(&env, new_env(tmp[0], NULL, "="));
+            // }
+            // else
+            tmp = new_env(args[i], "=", "=");
+                env_add_back(&env, tmp);
+                printf("%s\n", env_last(env)->key);
+                                printf("%s\n", env->key);
+
+                
+        }
+        i++;
+    }
+}
+
+void    replace_value(env_list  **env, char *key, char *value)
 {
     env_list *tmp;
 
-    tmp = env;
+    tmp = *env;
     while (tmp)
     {
         if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
@@ -34,12 +78,11 @@ void    replace_value(env_list  *env, char *key, char *value)
     }
 }
 
-//add str to value
-void    print_export(env_list *env)
+void    print_export(env_list **env)
 {
 	env_list *list;
 
-	list = env;
+	list = *env;
 	while (!list)
 	{
         if (!list->separator)
@@ -52,10 +95,23 @@ void    print_export(env_list *env)
 	}
 }
 
-void    exec_export(env_list **env, t_parser *parse)
+void exec_export(t_parser *parse, env_list **envp)
 {
-    if (!parse->args[1])
-        print_export((*env));
-    else
-        set_export((*env), parse->args[1]);
+	env_list	*env;
+    	env_list	*tmp;
+
+	env = *envp;
+	if (parse->args[1])
+		{
+            tmp = new_env(parse->args[1], parse->args[1], parse->args[1]);
+                env_add_back(envp, tmp);
+        }
+	else
+	{
+		while (env)
+		{
+			printf("declare -x %s%s%s\n", env->key, env->separator, env->content);
+			env = env->next;
+		}
+	}
 }
