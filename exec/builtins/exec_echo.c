@@ -58,7 +58,9 @@ void print_without_option(char **args)
 
 void    exec_echo(t_parser *parser)
 {
-    if (check_echo(parser->args[1]))
+    if (!parser->args[1])
+        exit(0);
+    else if (check_echo(parser->args[1]))
         print_args(parser->args);
     else
         print_without_option(parser->args);

@@ -12,42 +12,45 @@
    
 // }
 
-void    exec_unset(env_list **env, char *key)
+void    exec_unset(env_list **env, t_parser *parser)
 {
     env_list    *current;
     env_list    *temp;
-	int i = 0;
+	int i = 1;
 
     current = *env;
-    if (!key)
+    if (!parser->args[i])
         return ;
-    else if (check_key(key))
+    while (parser->args[i])
     {
-        if (!ft_strncmp((*env)->key, key, ft_strlen(key)))
+        if (check_key(parser->args[i]))
         {
-                temp = (*env);
-                (*env) = (*env)->next;
-                free(temp);
-        }
-        else
-        {
-            while (current->next)
+            if (!ft_strncmp((*env)->key, parser->args[i], ft_strlen(parser->args[i])))
             {
-                if (!ft_strncmp(current->next->key, key, ft_strlen(key) + 1))
-                {
-					i = 1;
-                    temp = current->next;
-					if (current->next->next)
-                    	current->next = current->next->next;
-					else 
-					{
-						current->next = NULL;
-						break;
-					}
+                    temp = (*env);
+                    (*env) = (*env)->next;
                     free(temp);
+            }
+            else
+            {
+                while (current->next)
+                {
+                    if (!ft_strncmp(current->next->key, parser->args[i], ft_strlen(parser->args[i]) + 1))
+                    {
+                        temp = current->next;
+	    				if (current->next->next)
+                        	current->next = current->next->next;
+	    				else 
+	    				{
+	    					current->next = NULL;
+	    					break;
+	    				}
+                        free(temp);
+                    }
+                    current = current->next;
                 }
-                current = current->next;
             }
         }
+        i++;
     }
 }

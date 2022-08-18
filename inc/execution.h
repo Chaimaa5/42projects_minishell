@@ -19,7 +19,7 @@ void    exec_env(t_parser *parse, env_list **envp);
 void    exec_exit(t_parser *parser);
 void    exec_export(t_parser *parse, env_list **envp);
 void    exec_pwd(void);
-void    exec_unset(env_list **env, char *key);
+void    exec_unset(env_list **env, t_parser *parser);
 
 //env_list
 env_list	*env_last(env_list *lst);
@@ -43,7 +43,7 @@ void    delete_env(env_list **env,  char *key);
 int     ft_count_elems(char **str);
 
 
-void	exec_builtins(t_parser **parse,  env_list **env);
+void	exec_builtins(t_parser **parse);
 void    pipeline_execution(t_parser *parser, env_list **envp);
 void    redirections(t_redirection *red);
 

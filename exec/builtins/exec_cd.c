@@ -1,5 +1,9 @@
 #include "../../inc/header.h"
-
+// OLDPWD
+// PWD
+// unset PATH
+// export var only one time
+//echo
 void    exec_cd(char *path)
 {
 	

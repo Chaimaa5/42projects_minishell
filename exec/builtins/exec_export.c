@@ -3,7 +3,7 @@
 int	ft_isalnumdash(int c)
 {
 	if ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z')
-		|| (c >= 'A' && c <= 'Z') || (c == '_'))
+		|| (c >= 'A' && c <= 'Z') || (c == '_') || (c == '='))
 		return (1);
 	return (0);
 }
@@ -53,20 +53,21 @@ void set_export(env_list *env,  char **args)
     {
         if (check_key(args[i]))
         {
-            if (!ft_strchr(*args, '='))
+            if (ft_strchr(*args, '='))
             {
-                temp = ft_split(args[1], '=');
-                if (!temp[1])
+                temp = ft_split(args[i], '=');
+                if (temp[1])
                     env_add_back(&env, new_env(temp[0], temp[1], "="));
                 else
-                    env_add_back(&env, new_env(temp[0], "\"\"", "="));
+                    env_add_back(&env, new_env(temp[0], NULL, "="));
             }
             else
             {
-                tmp = new_env(args[1], NULL, NULL);
+                tmp = new_env(args[i], NULL, NULL);
                 env_add_back(&env, tmp);
             }    
         }
+        free(temp);
         i++;
     }
 }
@@ -95,12 +96,12 @@ void exec_export(t_parser *parse, env_list **envp)
 	{
 		while (env)
 		{
-            if (!env->separator)
+            if (!env->separator && !env->content)
 		        printf("declare -x %s\n", env->key);
             else if (!env->content)
-		        printf("declare -x %s%s\n", env->key, env->separator);
+		        printf("declare -x %s%s\"\"\n", env->key, env->separator);
             else
-		        printf("declare -x %s%s%s\n", env->key, env->separator, env->content);
+		        printf("declare -x %s%s\"%s\"\n", env->key, env->separator, env->content);
 			env = env->next;
 		}
 	}

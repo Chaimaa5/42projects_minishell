@@ -14,7 +14,7 @@ int		check_builtin(t_parser *parser)
 	return (0);
 }
 
-void	exec_builtins(t_parser **parse,  env_list **env)
+void	exec_builtins(t_parser **parse)
 {
     if (!ft_strncmp((*parse)->cmd, "cd", 3))
         exec_cd((*parse)->args[1]);
@@ -24,19 +24,19 @@ void	exec_builtins(t_parser **parse,  env_list **env)
         exec_echo((*parse));
     else if (!ft_strncmp((*parse)->cmd, "exit", 6))
         exec_exit(*parse);
-    if (!ft_strncmp((*parse)->cmd, "env", 4))
-        exec_env((*parse), env);
 	exit(0);
 }
 
 void 	execute(t_parser *parser, char *path, char **envp, env_list *env)
 {
 	if (check_builtin(parser))
-        exec_builtins(&parser, &env);
+        exec_builtins(&parser);
 	else if (!ft_strncmp(parser->cmd, "export", 8))
         exec_export(parser, &env);
 	else if (!ft_strncmp(parser->cmd, "unset", 6))
-        exec_unset(&env, parser->args[1]);
+        exec_unset(&env, parser);
+	else if (!ft_strncmp(parser->cmd, "env", 4))
+        exec_env(parser, &env);
 	else if (execve(path, parser->args, envp) == -1)
 	{
 		ft_putstr_fd("command not found: ", 2);
