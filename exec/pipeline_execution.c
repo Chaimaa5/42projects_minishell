@@ -7,9 +7,11 @@ int		check_builtin(t_parser *parser)
 		return (1);
 	else if (!ft_strncmp(parser->cmd, "pwd", 4))
 		return (1);
-	else if (!ft_strncmp(parser->cmd, "pwd", 4))
+	else if (!ft_strncmp(parser->cmd, "echo", 6))
 		return (1);
 	else if (!ft_strncmp(parser->cmd, "export", 8))
+		return (1);
+	else if (!ft_strncmp(parser->cmd, "exit", 6))
 		return (1);
 	return (0);
 }
@@ -21,12 +23,11 @@ void	exec_builtins(t_parser **parse,  env_list *env)
     else if (!ft_strncmp((*parse)->cmd, "pwd", 4))
         exec_pwd();
     else if (!ft_strncmp((*parse)->cmd, "export", 8))
-	{
         exec_export((*parse), &env);
-		                printf("%s=%s\n", env_last(env)->key, env_last(env)->content);
-	}
-    // else if (!ft_strncmp((*parse)->cmd, "unset", 7))
-    //     exec_unset(env, parse);
+	else if (!ft_strncmp((*parse)->cmd, "echo", 6))
+        exec_echo((*parse));
+    else if (!ft_strncmp((*parse)->cmd, "exit", 6))
+        exec_exit(*parse);
     if (!ft_strncmp((*parse)->cmd, "env", 4))
         exec_env((*parse), &env);
 	exit(0);

@@ -98,14 +98,14 @@ void    print_export(env_list **env)
 void exec_export(t_parser *parse, env_list **envp)
 {
 	env_list	*env;
-    	env_list	*tmp;
+    env_list	*tmp;
 
 	env = *envp;
 	if (parse->args[1])
-		{
-            tmp = new_env(parse->args[1], parse->args[1], parse->args[1]);
-                env_add_back(envp, tmp);
-        }
+	{
+        tmp = new_env(parse->args[1], parse->args[1], parse->args[1]);
+            env_add_back(&env, tmp);
+    }
 	else
 	{
 		while (env)

@@ -104,15 +104,17 @@ env_list    *env_builder(char **envp)
 void exec_env(t_parser *parse, env_list **envp)
 {
 	env_list	*env;
-	
+
 	env = *envp;
 	if (parse->args[1])
 	{
 		printf("env: %s: No such file or directory\n", parse->args[1]);
 		return ;
 	}
+	
 	while (env)
 	{
+		
 		printf("%s%s%s\n", env->key, env->separator, env->content);
 		env = env->next;
 	}

@@ -14,9 +14,9 @@ typedef struct  env_list
 
 //builtins
 void    exec_cd(char *path);
-void    exec_echo(char **arg);
-void exec_env(t_parser *parse, env_list **envp);
-void    exec_exit(char *arg);
+void    exec_echo(t_parser *parser);
+void    exec_env(t_parser *parse, env_list **envp);
+void    exec_exit(t_parser *parser);
 void    exec_export(t_parser *parse, env_list **envp);
 void    exec_pwd(void);
 void    exec_unset(env_list *env, char *key);

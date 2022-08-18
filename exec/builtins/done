@@ -1,6 +1,7 @@
 cd
 pwd
 env
+echo
 
 to do
 export with '_'
