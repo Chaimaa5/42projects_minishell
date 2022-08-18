@@ -22,10 +22,6 @@ int    redirection_out_to(t_redirection *red)
     return (output);
 }
 
-// void dupred(t_redirection *red)
-// {
-//     dup2()
-// }
 void    redirections(t_redirection *red)
 {
     int output;
