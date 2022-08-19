@@ -35,7 +35,6 @@ void	last_exit(char *cmd)
 	ft_putstr_fd("command not found: ", 2);
 	ft_putendl_fd(cmd, 2);
 	exit_code = 127;
-	exit(exit_code);
 }
 
 void 	execute_child(t_parser *parser, char *path, char **envp, env_list *env)
@@ -91,6 +90,7 @@ void execute_last_cmd(t_parser *parser, env_list *env, int write_in)
 		}
 		redirections(parser->red);
 		execute(parser, path, envp, env);
+		exit(exit_code);
 	}
 }
 void	launch_child(t_parser *parser, env_list *env, int write_in, int *end)

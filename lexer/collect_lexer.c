@@ -9,16 +9,44 @@ char *join_to_join(t_lexer *lexer, char c)
 {
 	char *value;
 	char *s;
-	value = malloc(1);
-	value[0] = '\0';
+
+	value = ft_strdup("");
 	lexer_advance(lexer);
 	while(lexer->c != c && lexer->c != '\0')
 	{
 		s = get_char_as_string(lexer);
 		value = ft_strjoin(value, s);
+		
 		lexer_advance(lexer);
 	}
 	return(value);
+}
+
+char *add_value(char *value)
+{
+	int i;
+	int j;
+	char *s;
+	j = 0;
+	i = 0;
+	while(value[i])
+	{
+		if(value[i] == 2)
+			j++;
+		i++;
+	}
+	s = malloc(i - j + 1);
+	i = 0;
+	j = 0;
+	while(value[i])
+	{
+		if(value[i] != 2)
+			s[j++] = value[i];
+		i++;
+	}
+	free(value);
+	s[j] = '\0';
+	return(s);
 }
 
 t_token *collect_cmd(t_lexer *lexer)
@@ -41,9 +69,10 @@ t_token *collect_cmd(t_lexer *lexer)
 		{
 			join = ft_strjoin(join, join_to_join(lexer, lexer->c));
 			value = ft_strjoin(value, join);
-			free(join);
 		}
+		free(join);
 	}
+	value = add_value(value);
 	return(init_token(TOKEN_STR, value));
 }
 
@@ -72,6 +101,7 @@ t_token *collect_red(t_lexer *lexer, int i)
 		}
 		lexer_advance(lexer);
 	}
+	value = add_value(value);
 	return(init_token(i, value));
 }
 
@@ -101,6 +131,7 @@ t_token *collect_apn_hrd(t_lexer *lexer, int i)
 		}
 		lexer_advance(lexer);
 	}
+	value = add_value(value);
 	return(init_token(i, value));
 }
 
@@ -110,10 +141,8 @@ t_token *collect_string(t_lexer *lexer)
 	char *join;
 	char *s;
 
-	join = malloc(1);
-	value = malloc(1);
-	join[0] = '\0';
-	value[0] = '\0';
+	join = ft_strdup("");
+	value = ft_strdup("");
 	while (lexer->c != '|' && lexer->c != '>' && lexer->c != '<' && lexer->c != '\0' && lexer->c != ' ')
 	{
 		if(lexer->c != '"' && lexer->c != '\'')
@@ -129,5 +158,6 @@ t_token *collect_string(t_lexer *lexer)
 		}
 		lexer_advance(lexer);
 	}
+	value = add_value(value);
 	return(init_token(TOKEN_STR, value));
 }
