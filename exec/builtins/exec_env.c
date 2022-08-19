@@ -1,5 +1,19 @@
 #include "../../inc/header.h"
 
+char *get_env(env_list  **env, char *key)
+{
+    env_list *tmp;
+
+    tmp = *env;
+    while (tmp)
+    {
+        if (!ft_strncmp(tmp->key, key, (ft_strlen(key) + 1)))
+            return (tmp->content);
+        tmp = tmp->next;
+    }
+	return (NULL);
+}
+
 int    search_env(env_list  **env, char *key)
 {
     env_list *tmp;

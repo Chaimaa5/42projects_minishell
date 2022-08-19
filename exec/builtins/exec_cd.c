@@ -7,7 +7,7 @@ void    exec_cd(char *path, env_list *env)
 	{
 		if (search_env(&env, "HOME"))
 		{
-        	if(chdir(getenv("HOME")))
+        	if(chdir(get_env(&env, "HOME")))
 				printf("cd: HOME not set\n");
 		}
 	}

@@ -3,9 +3,7 @@
 
 int		check_builtin(t_parser *parser)
 {
-	if (!ft_strncmp(parser->cmd, "cd", 3))
-		return (1);
-	else if (!ft_strncmp(parser->cmd, "pwd", 4))
+	if (!ft_strncmp(parser->cmd, "pwd", 4))
 		return (1);
 	else if (!ft_strncmp(parser->cmd, "echo", 6))
 		return (1);
@@ -16,9 +14,7 @@ int		check_builtin(t_parser *parser)
 
 void	exec_builtins(t_parser **parse)
 {
-    if (!ft_strncmp((*parse)->cmd, "cd", 3))
-        exec_cd((*parse)->args[1]);
-    else if (!ft_strncmp((*parse)->cmd, "pwd", 4))
+    if (!ft_strncmp((*parse)->cmd, "pwd", 4))
         exec_pwd();
 	else if (!ft_strncmp((*parse)->cmd, "echo", 6))
         exec_echo((*parse));
@@ -36,6 +32,8 @@ void 	execute(t_parser *parser, char *path, char **envp, env_list *env)
         exec_unset(&env, parser);
 	else if (!ft_strncmp(parser->cmd, "env", 4))
         exec_env(parser, &env);
+	else  if (!ft_strncmp(parser->cmd, "cd", 3))
+        exec_cd(parser->args[1], env);
 	else if (execve(path, parser->args, envp) == -1)
 	{
 		ft_putstr_fd("command not found: ", 2);

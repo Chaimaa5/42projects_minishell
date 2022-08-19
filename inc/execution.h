@@ -13,7 +13,7 @@ typedef struct  env_list
 }   env_list;
 
 //builtins
-void    exec_cd(char *path);
+void    exec_cd(char *path, env_list *env);
 void    exec_echo(t_parser *parser);
 void    exec_env(t_parser *parse, env_list **envp);
 void    exec_exit(t_parser *parser);
@@ -30,6 +30,7 @@ char        **env_list_to_char(env_list **env);
 int         env_size(env_list **env);
 env_list    *env_builder(char **envp);
 int         search_env(env_list  **env, char *key);
+char    *get_env(env_list  **env, char *key);
 
 
 //export
