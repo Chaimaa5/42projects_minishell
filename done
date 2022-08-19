@@ -6,9 +6,8 @@ exit errors
 
 to do
 fix cd without exit
-exit code
 unset
 // OLDPWD for cd
-capital env, pwd & echo
 heredoc
 leaks
+> s

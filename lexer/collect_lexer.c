@@ -31,7 +31,7 @@ char *add_value(char *value)
 	i = 0;
 	while(value[i])
 	{
-		if(value[i] == 2)
+		if(value[i] >= 1 && value[i] <= 5)
 			j++;
 		i++;
 	}
@@ -40,7 +40,7 @@ char *add_value(char *value)
 	j = 0;
 	while(value[i])
 	{
-		if(value[i] != 2)
+		if(value[i] >= 6)
 			s[j++] = value[i];
 		i++;
 	}
@@ -159,6 +159,5 @@ t_token *collect_string(t_lexer *lexer)
 		lexer_advance(lexer);
 	}
 	value = add_value(value);
-	printf("%zu\n", ft_strlen(value));
 	return(init_token(TOKEN_STR, value));
 }
