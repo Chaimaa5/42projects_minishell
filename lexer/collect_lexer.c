@@ -69,8 +69,8 @@ t_token *collect_cmd(t_lexer *lexer)
 		{
 			join = ft_strjoin(join, join_to_join(lexer, lexer->c));
 			value = ft_strjoin(value, join);
-		}
 		free(join);
+		}
 	}
 	value = add_value(value);
 	return(init_token(TOKEN_STR, value));
@@ -159,5 +159,6 @@ t_token *collect_string(t_lexer *lexer)
 		lexer_advance(lexer);
 	}
 	value = add_value(value);
+	printf("%zu\n", ft_strlen(value));
 	return(init_token(TOKEN_STR, value));
 }

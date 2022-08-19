@@ -16,9 +16,8 @@ int main(int ac, char **av, char **envp)
 	{
 		line = readline("minishell: ");
 		if(ft_syntax_error(line))
-			lexing(line, &token);
+			parse = lexing(line, &token);
 		add_history(line);
-		parse = lexing(line, &token);
 		if(parse)
 			pipeline_execution(parse, &env);
 	}
