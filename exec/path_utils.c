@@ -8,10 +8,14 @@ char	**find_path(char **envp)
 	char	**paths;
 
 	i = find_path_env(envp, "PATH=");
-	env_path = ft_split(envp[i], '=');
-	paths = ft_split(env_path[1], ':');
-	free_array(env_path);
-	return (paths);
+	if (i !=  -1)
+	{
+		env_path = ft_split(envp[i], '=');
+		paths = ft_split(env_path[1], ':');
+		free_array(env_path);
+		return (paths);
+	}
+	return (NULL);
 }
 
 int	find_path_env(char **envp, char *path)
@@ -25,7 +29,7 @@ int	find_path_env(char **envp, char *path)
 			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
 char	*search(char **envp, char *cmd)
@@ -37,20 +41,23 @@ char	*search(char **envp, char *cmd)
 
 	i = 0;
 	paths = find_path(envp);
-	while (paths[i])
+	if (paths)
 	{
-		x2 = ft_strjoin(paths[i], "/");
-		x = ft_strjoin(x2, cmd);
-		free(x2);
-		if (access(x, F_OK) == 0)
+		while (paths[i])
 		{
-			free_array(paths);
-			return (x);
+			x2 = ft_strjoin(paths[i], "/");
+			x = ft_strjoin(x2, cmd);
+			free(x2);
+			if (access(x, F_OK) == 0)
+			{
+				free_array(paths);
+				return (x);
+			}
+			free(x);
+			i++;
 		}
-		free(x);
-		i++;
+		free_array(paths);
 	}
-	free_array(paths);
 	if (access(cmd, F_OK) == 0)
 		return (cmd);
 	return (NULL);

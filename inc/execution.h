@@ -29,6 +29,7 @@ env_list	*new_env(char *key, char *content, char *separator);
 char        **env_list_to_char(env_list **env);
 int         env_size(env_list **env);
 env_list    *env_builder(char **envp);
+int         search_env(env_list  **env, char *key);
 
 
 //export

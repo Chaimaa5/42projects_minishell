@@ -1,16 +1,15 @@
 #include "../../inc/header.h"
-// OLDPWD
-// PWD
-// unset PATH
-// export var only one time
-//echo
-void    exec_cd(char *path)
+
+void    exec_cd(char *path, env_list *env)
 {
 	
     if (path == NULL || !ft_strncmp(path, "~", 2))
 	{
-        if(chdir(getenv("HOME")))
-			printf("cd: HOME not set\n");
+		if (search_env(&env, "HOME"))
+		{
+        	if(chdir(getenv("HOME")))
+				printf("cd: HOME not set\n");
+		}
 	}
 	else
 	{

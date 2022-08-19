@@ -24,7 +24,6 @@ void	exec_builtins(t_parser **parse)
         exec_echo((*parse));
     else if (!ft_strncmp((*parse)->cmd, "exit", 6))
         exec_exit(*parse);
-	exit(0);
 }
 
 void 	execute(t_parser *parser, char *path, char **envp, env_list *env)
