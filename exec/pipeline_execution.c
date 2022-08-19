@@ -14,13 +14,46 @@ int		check_builtin(t_parser *parser)
 
 void	exec_builtins(t_parser **parse)
 {
-    if (!ft_strncmp((*parse)->cmd, "pwd", 4))
+    if (!ft_strncmp((*parse)->cmd, "pwd", 4) || !ft_strncmp((*parse)->cmd, "PWD", 4))
         exec_pwd();
-	else if (!ft_strncmp((*parse)->cmd, "echo", 6))
+	else if (!ft_strncmp((*parse)->cmd, "echo", 6) || !ft_strncmp((*parse)->cmd, "ECHO", 6))
         exec_echo((*parse));
     else if (!ft_strncmp((*parse)->cmd, "exit", 6))
         exec_exit(*parse);
 }
+
+void	exit_child(char *cmd)
+{
+	ft_putstr_fd("command not found: ", 2);
+	ft_putendl_fd(cmd, 2);
+	exit_code = 0;
+	exit(exit_code);
+}
+
+void	last_exit(char *cmd)
+{
+	ft_putstr_fd("command not found: ", 2);
+	ft_putendl_fd(cmd, 2);
+	exit_code = 127;
+	exit(exit_code);
+}
+
+void 	execute_child(t_parser *parser, char *path, char **envp, env_list *env)
+{
+	if (check_builtin(parser))
+        exec_builtins(&parser);
+	else if (!ft_strncmp(parser->cmd, "export", 8))
+        exec_export(parser, &env);
+	else if (!ft_strncmp(parser->cmd, "unset", 6))
+        exec_unset(&env, parser);
+	else if (!ft_strncmp(parser->cmd, "env", 4) || !ft_strncmp(parser->cmd, "ENV", 4))
+        exec_env(parser, &env);
+	else  if (!ft_strncmp(parser->cmd, "cd", 3))
+        exec_cd(parser->args[1], env);
+	else if (execve(path, parser->args, envp) == -1)
+		exit_child(parser->cmd);
+}
+
 
 void 	execute(t_parser *parser, char *path, char **envp, env_list *env)
 {
@@ -30,16 +63,12 @@ void 	execute(t_parser *parser, char *path, char **envp, env_list *env)
         exec_export(parser, &env);
 	else if (!ft_strncmp(parser->cmd, "unset", 6))
         exec_unset(&env, parser);
-	else if (!ft_strncmp(parser->cmd, "env", 4))
+	else if (!ft_strncmp(parser->cmd, "env", 4) || !ft_strncmp(parser->cmd, "ENV", 4))
         exec_env(parser, &env);
 	else  if (!ft_strncmp(parser->cmd, "cd", 3))
         exec_cd(parser->args[1], env);
 	else if (execve(path, parser->args, envp) == -1)
-	{
-		ft_putstr_fd("command not found: ", 2);
-		ft_putendl_fd(parser->cmd, 2);
-		exit(127);
-	}
+		last_exit(parser->cmd);
 }
 
 void execute_last_cmd(t_parser *parser, env_list *env, int write_in)
@@ -78,7 +107,7 @@ void	launch_child(t_parser *parser, env_list *env, int write_in, int *end)
 	dup2(end[WRITE], STDOUT_FILENO);
 	close(end[WRITE]);
 	redirections(parser->red);
-	execute(parser, path, envp, env);
+	execute_child(parser, path, envp, env);
 }
 
 void    pipeline_execution(t_parser *parser, env_list **envp)
@@ -102,7 +131,11 @@ void    pipeline_execution(t_parser *parser, env_list **envp)
 		parser = parser->next;
 	}
 	execute_last_cmd(parser, env, write_in);
-	while(waitpid(-1, &status, 0) > 0);
+	while(waitpid(-1, &status, 0) > 0)
+	{
+		if (WIFEXITED(status))
+        	exit_code = WEXITSTATUS(status);
+	}
 }
 
 

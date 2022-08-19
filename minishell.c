@@ -21,6 +21,8 @@ int main(int ac, char **av, char **envp)
 		parse = lexing(line, &token);
 		if(parse)
 			pipeline_execution(parse, &env);
+		// heredoc();
+
 	}
 	return (0);
 }

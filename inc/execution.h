@@ -13,7 +13,7 @@ typedef struct  env_list
 }   env_list;
 
 //builtins
-void    exec_cd(char *path, env_list *env);
+int     exec_cd(char *path, env_list *env);
 void    exec_echo(t_parser *parser);
 void    exec_env(t_parser *parse, env_list **envp);
 void    exec_exit(t_parser *parser);
@@ -54,5 +54,8 @@ char	*search(char **env, char *cmd);
 char	**find_path(char **envp);
 int	    find_path_env(char **envp, char *path);
 void	free_array(char **array);
+
+
+void    heredoc();
 
 #endif

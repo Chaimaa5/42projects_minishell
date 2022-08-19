@@ -30,6 +30,7 @@ int	check_key(char *key)
             if (!ft_isalnumdash(key[i]))
             {
                 printf("export: %s: not a valid identifier\n", key);
+				exit_code = 1;
                 return (0);
             }
             i++;
@@ -38,6 +39,7 @@ int	check_key(char *key)
     else
     {
         printf("export: %s: event not found\n", key);
+		exit_code = 0;
         return (0);
     }
     return (1);

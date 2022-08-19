@@ -20,8 +20,4 @@ void    exec_exit(t_parser *parser)
         ft_putendl_fd("exit: too many arguments", 2);
     if (!is_numeric(parser->args[1]))
         ft_putendl_fd("exit: numeric argument required", 2);
-    //check arg if alphanum
-    //catch exit code
-    //print exit
-    // terminate the  prompt
 }

@@ -9,7 +9,8 @@ char *join_to_join(t_lexer *lexer, char c)
 {
 	char *value;
 	char *s;
-	value = ft_strdup("");
+	value = malloc(1);
+	value[0] = '\0';
 	lexer_advance(lexer);
 	while(lexer->c != c && lexer->c != '\0')
 	{
@@ -109,8 +110,10 @@ t_token *collect_string(t_lexer *lexer)
 	char *join;
 	char *s;
 
-	join = ft_strdup("");
-	value = ft_strdup("");
+	join = malloc(1);
+	value = malloc(1);
+	join[0] = '\0';
+	value[0] = '\0';
 	while (lexer->c != '|' && lexer->c != '>' && lexer->c != '<' && lexer->c != '\0' && lexer->c != ' ')
 	{
 		if(lexer->c != '"' && lexer->c != '\'')

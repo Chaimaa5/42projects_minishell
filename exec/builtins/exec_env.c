@@ -123,6 +123,7 @@ void exec_env(t_parser *parse, env_list **envp)
 	if (parse->args[1])
 	{
 		printf("env: %s: No such file or directory\n", parse->args[1]);
+		exit_code = 127;
 		return ;
 	}
 	while (env)
@@ -131,5 +132,4 @@ void exec_env(t_parser *parse, env_list **envp)
 			printf("%s%s%s\n", env->key, env->separator, env->content);
 		env = env->next;
 	}
-	exit(0);
 }

@@ -8,6 +8,7 @@ to do
 fix cd without exit
 exit code
 unset
-// OLDPWD
-// PWD
-// export and replace
+// OLDPWD for cd
+capital env, pwd & echo
+heredoc
+leaks

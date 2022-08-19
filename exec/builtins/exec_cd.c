@@ -1,6 +1,6 @@
 #include "../../inc/header.h"
 
-void    exec_cd(char *path, env_list *env)
+int    exec_cd(char *path, env_list *env)
 {
 	
     if (path == NULL || !ft_strncmp(path, "~", 2))
@@ -8,13 +8,19 @@ void    exec_cd(char *path, env_list *env)
 		if (search_env(&env, "HOME"))
 		{
         	if(chdir(get_env(&env, "HOME")))
+			{
 				printf("cd: HOME not set\n");
+				exit_code = 1;
+			}
 		}
 	}
 	else
 	{
 		if (chdir(path))
+		{
 			perror("cd: ");
+			exit_code = 1;
+		}
 	}
-		//another case missing
+	return (0);
 }
