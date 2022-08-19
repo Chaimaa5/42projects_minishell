@@ -5,11 +5,9 @@ echo
 exit errors
 
 to do
-export with '_'
 fix cd without exit
 exit code
 unset
 // OLDPWD
 // PWD
-// unset PATH
-// export var only one time
+// export and replace

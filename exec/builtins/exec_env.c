@@ -21,7 +21,7 @@ int    search_env(env_list  **env, char *key)
     tmp = *env;
     while (tmp)
     {
-        if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
+        if (!ft_strncmp(tmp->key, key, (ft_strlen(key) + 1)))
             return (1);
         tmp = tmp->next;
     }

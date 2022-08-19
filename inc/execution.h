@@ -31,6 +31,7 @@ int         env_size(env_list **env);
 env_list    *env_builder(char **envp);
 int         search_env(env_list  **env, char *key);
 char    *get_env(env_list  **env, char *key);
+int	check_doube(env_list **env, char *key);
 
 
 //export

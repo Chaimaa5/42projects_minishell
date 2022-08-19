@@ -8,7 +8,17 @@ int	ft_isalnumdash(int c)
 	return (0);
 }
 
-int     check_key(char *key)
+int	check_doube(env_list **env, char *key)
+{
+	char **tmp;
+
+	tmp  = ft_split(key, '=');
+	if (search_env(env, tmp[0]))
+		return (1);
+	return (0);
+}
+
+int	check_key(char *key)
 {
     int i;
 
@@ -42,6 +52,21 @@ env_list	*env_last(env_list *lst)
 	return (lst);
 }
 
+void    replace_value(env_list  **env, char *key, char *value)
+{
+    env_list *tmp;
+
+    tmp = *env;
+    while (tmp)
+    {
+        if (!ft_strncmp(tmp->key, key, (ft_strlen(key) + 1)))
+		{
+			tmp->separator = "=";
+            tmp->content = value;
+		}
+        tmp = tmp->next;
+    }
+}
 
 void set_export(env_list *env,  char **args)
 {
@@ -51,37 +76,32 @@ void set_export(env_list *env,  char **args)
     i = 1;
     while(args[i])
     {
-        if (check_key(args[i]))
-        {
-            if (ft_strchr(*args, '='))
-            {
-                temp = ft_split(args[i], '=');
-                if (temp[1])
-                    env_add_back(&env, new_env(temp[0], temp[1], "="));
-                else
-                    env_add_back(&env, new_env(temp[0], NULL, "="));
-            }
-            else
-            {
-                tmp = new_env(args[i], NULL, NULL);
-                env_add_back(&env, tmp);
-            }    
-        }
-        free(temp);
+		if (!check_doube(&env, args[i]))
+		{
+        	if (check_key(args[i]))
+        	{
+        	    if (ft_strchr(args[i], '='))
+        	    {
+        	        temp = ft_split(args[i], '=');
+        	        if (temp[1])
+        	            env_add_back(&env, new_env(temp[0], temp[1], "="));
+        	        else
+        	            env_add_back(&env, new_env(temp[0], NULL, "="));
+        	    }
+        	    else
+        	    {
+        	        tmp = new_env(args[i], NULL, NULL);
+        	        env_add_back(&env, tmp);
+        	    }  
+        		free(temp);
+        	}
+		}
+		else
+		{
+			temp = ft_split(args[i], '=');
+			replace_value(&env, temp[0], temp[1]);
+		}
         i++;
-    }
-}
-
-void    replace_value(env_list  **env, char *key, char *value)
-{
-    env_list *tmp;
-
-    tmp = *env;
-    while (tmp)
-    {
-        if (!ft_strncmp(tmp->key, key, ft_strlen(key)))
-            tmp->content = value;
-        tmp = tmp->next;
     }
 }
 
