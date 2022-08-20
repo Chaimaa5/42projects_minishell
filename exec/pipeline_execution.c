@@ -88,7 +88,7 @@ void execute_last_cmd(t_parser *parser, env_list *env, int write_in)
 			dup2(write_in, STDIN_FILENO);
 			close(write_in);
 		}
-		redirections(parser->red);
+		redirections(parser->red, parser->cmd);
 		execute(parser, path, envp, env);
 		exit(exit_code);
 	}
@@ -106,7 +106,7 @@ void	launch_child(t_parser *parser, env_list *env, int write_in, int *end)
 	}
 	dup2(end[WRITE], STDOUT_FILENO);
 	close(end[WRITE]);
-	redirections(parser->red);
+	redirections(parser->red, parser->cmd);
 	execute_child(parser, path, envp, env);
 }
 
@@ -132,7 +132,7 @@ void    pipeline_execution(t_parser *parser, env_list **envp)
 	}
 	if (!parser->cmd && parser->red)
 	{
-		redirections(parser->red);
+		redirections(parser->red, parser->cmd);
 		return ;
 	}
 	else

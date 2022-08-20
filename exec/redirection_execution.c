@@ -22,7 +22,7 @@ int    redirection_out_to(t_redirection *red)
     return (output);
 }
 
-void    redirections(t_redirection *red)
+void    redirections(t_redirection *red, char *cmd)
 {
     int output;
 
@@ -34,7 +34,7 @@ void    redirections(t_redirection *red)
             output = redirection_in_from(red);
         else if (red->type == TOKEN_APPEND || red->type == TOKEN_REDOUT)
             output = redirection_out_to(red);
-        if  (!red->next)
+        if  (!red->next && cmd)
         {
             dup2(output, STDOUT_FILENO);
             close(output);
