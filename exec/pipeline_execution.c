@@ -130,7 +130,13 @@ void    pipeline_execution(t_parser *parser, env_list **envp)
 		close(end[WRITE]);
 		parser = parser->next;
 	}
-	execute_last_cmd(parser, env, write_in);
+	if (!parser->cmd && parser->red)
+	{
+		redirections(parser->red);
+		return ;
+	}
+	else
+		execute_last_cmd(parser, env, write_in);
 	while(waitpid(-1, &status, 0) > 0)
 	{
 		if (WIFEXITED(status))
