@@ -1,9 +1,7 @@
 #ifndef HEADER_H
 #define HEADER_H
-
 #include "../libft/libft.h"
 #include "lexer.h"
-#include "token.h"
 #include "parser.h"
 #include "execution.h"
 #include <stdio.h>
@@ -19,6 +17,8 @@
 #include <errno.h>
 #include <limits.h>
 #include <ctype.h>
+#include "struct.h"
+
 
 #define ERROR 0
 #define MALLOC_ERR 1

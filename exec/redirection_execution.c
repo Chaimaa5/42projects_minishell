@@ -24,20 +24,29 @@ int    redirection_out_to(t_redirection *red)
 
 void    redirections(t_redirection *red, char *cmd)
 {
-    int output;
+    int output = -1;
+    int input = -2;
 
     if (!red)
         return ;
     while (red)
     {
         if (red->type == TOKEN_REDIN)
-            output = redirection_in_from(red);
+            input = redirection_in_from(red);
         else if (red->type == TOKEN_APPEND || red->type == TOKEN_REDOUT)
             output = redirection_out_to(red);
         if  (!red->next && cmd)
         {
-            dup2(output, STDOUT_FILENO);
-            close(output);
+            if (output != -1)
+            {
+                dup2(output, STDOUT_FILENO);
+                close(output);
+            }
+            else if (input != -2)
+            {
+                dup2(input, STDIN_FILENO);
+                close(input);
+            }
         }
         red = red->next;
     }

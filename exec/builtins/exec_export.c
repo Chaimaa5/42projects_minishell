@@ -8,7 +8,7 @@ int	ft_isalnumdash(int c)
 	return (0);
 }
 
-int	check_doube(env_list **env, char *key)
+int	check_doube(t_env_list **env, char *key)
 {
 	char **tmp;
 
@@ -45,7 +45,7 @@ int	check_key(char *key)
     return (1);
 }
 
-env_list	*env_last(env_list *lst)
+t_env_list	*env_last(t_env_list *lst)
 {
 	if (!lst)
 		return (0);
@@ -54,9 +54,9 @@ env_list	*env_last(env_list *lst)
 	return (lst);
 }
 
-void    replace_value(env_list  **env, char *key, char *value)
+void    replace_value(t_env_list  **env, char *key, char *value)
 {
-    env_list *tmp;
+    t_env_list *tmp;
 
     tmp = *env;
     while (tmp)
@@ -70,11 +70,11 @@ void    replace_value(env_list  **env, char *key, char *value)
     }
 }
 
-void set_export(env_list *env,  char **args)
+void set_export(t_env_list *env,  char **args)
 {
     char    **temp = NULL;
     int i;
-    env_list *tmp;
+    t_env_list *tmp;
     i = 1;
     while(args[i])
     {
@@ -107,9 +107,9 @@ void set_export(env_list *env,  char **args)
     }
 }
 
-void exec_export(t_parser *parse, env_list **envp)
+void exec_export(t_parser *parse, t_env_list **envp)
 {
-	env_list	*env;
+	t_env_list	*env;
 
 	env = *envp;
 	if (parse->args[1])

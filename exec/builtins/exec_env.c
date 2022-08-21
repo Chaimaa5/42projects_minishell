@@ -1,8 +1,8 @@
 #include "../../inc/header.h"
 
-char *get_env(env_list  **env, char *key)
+char *get_env(t_env_list  **env, char *key)
 {
-    env_list *tmp;
+    t_env_list *tmp;
 
     tmp = *env;
     while (tmp)
@@ -14,9 +14,9 @@ char *get_env(env_list  **env, char *key)
 	return (NULL);
 }
 
-int    search_env(env_list  **env, char *key)
+int    search_env(t_env_list  **env, char *key)
 {
-    env_list *tmp;
+    t_env_list *tmp;
 
     tmp = *env;
     while (tmp)
@@ -28,10 +28,10 @@ int    search_env(env_list  **env, char *key)
 	return (0);
 }
 
-int	env_size(env_list **env)
+int	env_size(t_env_list **env)
 {
 	int	size;
-	env_list *lst;
+	t_env_list *lst;
 
 	lst = (*env);
 	size = 0;
@@ -44,16 +44,14 @@ int	env_size(env_list **env)
 	}
 	return (size);
 }
-
-char **env_list_to_char(env_list **env)
+char **t_env_list_to_char(t_env_list **env)
 {
-	env_list *tmp;
-	char **envp;
+	t_env_list *tmp;
+	char **envp = malloc (sizeof(char *) * env_size(env));
 	int i;
 
 	tmp = (*env);
 	i = 0;
-	envp = malloc (sizeof(char *) * (env_size(env) + 1));
 	while (tmp)
 	{
 		envp[i] = ft_strjoin(tmp->key, tmp->separator);
@@ -61,15 +59,14 @@ char **env_list_to_char(env_list **env)
 		tmp = tmp->next;
 		i++;
 	}
-	envp[i] = NULL;
 	return (envp);
 }
 
-env_list	*new_env(char *key, char *content, char *separator)
+t_env_list	*new_env(char *key, char *content, char *separator)
 {
-	env_list	*new;
+	t_env_list	*new;
 
-	new = malloc(sizeof(env_list) * 1);
+	new = malloc(sizeof(t_env_list) * 1);
 	if (!new)
 		return (0);
 	new->key = key;
@@ -79,9 +76,9 @@ env_list	*new_env(char *key, char *content, char *separator)
 	return (new);
 }
 
-void	env_add_back(env_list **lst, env_list *new)
+void	env_add_back(t_env_list **lst, t_env_list *new)
 {
-	env_list	*n;
+	t_env_list	*n;
 
 
 	n = *lst;
@@ -98,11 +95,28 @@ void	env_add_back(env_list **lst, env_list *new)
 
 }
 
-env_list    *env_builder(char **envp)
+t_env_list    **read_env(char **envp)
+{
+    t_env_list    **env;
+    char        **tmp;
+    int         i;
+
+    i = 0;
+	env = malloc(sizeof(t_env_list *));
+    while(envp[i])
+    {
+        tmp = ft_split(envp[i], '=');
+        env_add_back(env, new_env(tmp[0], tmp[1], "="));
+		i++;
+    }
+    return (env);
+}
+
+t_env_list    *env_builder(char **envp)
 {
     char        **tmp;
     int         i;
-	env_list	*env;
+	t_env_list	*env;
 
 	env  = NULL;
     i = 0;
@@ -115,21 +129,21 @@ env_list    *env_builder(char **envp)
 	return (env);
 }
 
-void exec_env(t_parser *parse, env_list **envp)
+void exec_env(t_parser *parse, t_env_list **envp)
 {
-	env_list	*env;
+	t_env_list	*env;
 
 	env = *envp;
 	if (parse->args[1])
 	{
 		printf("env: %s: No such file or directory\n", parse->args[1]);
-		exit_code = 127;
 		return ;
 	}
+	
 	while (env)
 	{
-		if (env->separator && env->content)
-			printf("%s%s%s\n", env->key, env->separator, env->content);
+		
+		printf("%s%s%s\n", env->key, env->separator, env->content);
 		env = env->next;
 	}
 }

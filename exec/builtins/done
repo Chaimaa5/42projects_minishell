@@ -5,9 +5,7 @@ echo
 exit errors
 
 to do
+export with '_'
 fix cd without exit
+exit code
 unset
-// OLDPWD for cd
-heredoc
-leaks
-> s
