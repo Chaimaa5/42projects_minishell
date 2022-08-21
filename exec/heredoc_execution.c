@@ -13,26 +13,27 @@ void    heredoc(t_parser **parse)
     int tmp_file;
     char *buff;
     t_parser *parser;
+    t_redirection *red;
 
     parser = *parse;
     tmp_file = open("tmp/file", O_WRONLY | O_CREAT | O_TRUNC, 0777);
     while (parser)
     {
-        while(parser->red)
+        red = parser->red; 
+        while(red)
         {
-            if (parser->red->type == TOKEN_HEREDOC)
+            if (red->type == TOKEN_HEREDOC)
             {
                 buff = readline("heredoc> ");
-                while((ft_strncmp(parser->args[0], buff, ft_strlen(buff))))
+                while((ft_strncmp(red->file, buff, ft_strlen(buff))))
                 {
                     buff = readline("heredoc> ");
 		            add_history(buff);
                     ft_putendl_fd(buff, tmp_file);
                 }
             }
-            parser->red = parser->red->next;
+            red = red->next;
         }
         parser = parser->next;
     }
-    
-}
+} 

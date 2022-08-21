@@ -19,7 +19,7 @@ int main(int ac, char **av, char **envp)
 		else
 			parse = NULL;
 		add_history(line);
-		// heredoc(&parse);
+		heredoc(&parse);
 		if(parse)
 			pipeline_execution(parse, &env);
 	}
