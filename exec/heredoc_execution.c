@@ -12,19 +12,18 @@ void    heredoc(t_parser **parse)
     // int file = random_file();
     int tmp_file;
     char *buff;
-    char *del;
     t_parser *parser;
 
     parser = *parse;
     tmp_file = open("tmp/file", O_WRONLY | O_CREAT | O_TRUNC, 0777);
-    del = parser->args[1];
     while (parser)
     {
         while(parser->red)
         {
             if (parser->red->type == TOKEN_HEREDOC)
             {
-                while(!(ft_strncmp(del, buff, ft_strlen(buff))))
+                buff = readline("heredoc> ");
+                while((ft_strncmp(parser->args[0], buff, ft_strlen(buff))))
                 {
                     buff = readline("heredoc> ");
 		            add_history(buff);
