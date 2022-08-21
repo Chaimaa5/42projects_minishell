@@ -19,8 +19,9 @@ int main(int ac, char **av, char **envp)
 		else
 			parse = NULL;
 		add_history(line);
-		if(parse)
-			pipeline_execution(parse, &env);
+		heredoc(&parse);
+		// if(parse)
+		// 	pipeline_execution(parse, &env);
 		// system("leaks minishell");
 	}
 	return (0);

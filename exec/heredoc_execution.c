@@ -1,22 +1,39 @@
 #include "../inc/header.h"
 
-// int random_file()
-// {
-//     static int file;
+int random_file()
+{
+    static int file;
 
-//     file += 1;
-//     return (file); 
-// }
-// void    heredoc()
-// {
-//     int file = random_file();
-//     int tmp_file;
-//     char *buff;
+    file += 1;
+    return (file); 
+}
+void    heredoc(t_parser **parse)
+{
+    // int file = random_file();
+    int tmp_file;
+    char *buff;
+    char *del;
+    t_parser *parser;
 
-//     tmp_file = open("tmp/file", O_WRONLY | O_CREAT | O_TRUNC, 0777);
-//     while(1)
-//     {
-//         buff = readline("heredoc> ");
-// 		add_history(buff);
-//     }
-// }
+    parser = *parse;
+    tmp_file = open("tmp/file", O_WRONLY | O_CREAT | O_TRUNC, 0777);
+    del = parser->args[1];
+    while (parser)
+    {
+        while(parser->red)
+        {
+            if (parser->red->type == TOKEN_HEREDOC)
+            {
+                while(!(ft_strncmp(del, buff, ft_strlen(buff))))
+                {
+                    buff = readline("heredoc> ");
+		            add_history(buff);
+                    ft_putendl_fd(buff, tmp_file);
+                }
+            }
+            parser->red = parser->red->next;
+        }
+        parser = parser->next;
+    }
+    
+}
