@@ -26,7 +26,6 @@ void	exec_builtins(t_parser **parse,  t_env_list **env)
         exec_exit(*parse);
     if (!ft_strncmp((*parse)->cmd, "env", 4))
         exec_env((*parse), env);
-	exit(0);
 }
 
 void 	execute(t_parser *parser, char *path, char **envp, t_env_list *env)
@@ -34,7 +33,10 @@ void 	execute(t_parser *parser, char *path, char **envp, t_env_list *env)
 	if (check_builtin(parser))
         exec_builtins(&parser, &env);
 	else if (!ft_strncmp(parser->cmd, "export", 8))
+	{
         exec_export(parser, &env);
+		return ;
+	}
 	else if (!ft_strncmp(parser->cmd, "unset", 6))
         exec_unset(&env, parser->args[1]);
 	else if (execve(path, parser->args, envp) == -1)
@@ -64,8 +66,9 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int write_in)
 			close(write_in);
 		}
 		redirections(parser->red, parser->cmd);
-		execute(parser, path, envp, env);
-		exit(0);
+		if (parser->cmd)
+			execute(parser, path, envp, env);
+		// exit(0);
 	}
 }
 void	launch_child(t_parser *parser, t_env_list *env, int write_in, int *end)
@@ -82,8 +85,9 @@ void	launch_child(t_parser *parser, t_env_list *env, int write_in, int *end)
 	dup2(end[WRITE], STDOUT_FILENO);
 	close(end[WRITE]);
 	redirections(parser->red, parser->cmd);
-	execute(parser, path, envp, env);
-			exit(0);
+	if (parser->cmd)
+		execute(parser, path, envp, env);
+	// exit(0);
 
 }
 
