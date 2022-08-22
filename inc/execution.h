@@ -38,14 +38,14 @@ int     ft_count_elems(char **str);
 
 
 void	exec_builtins(t_parser **parse,  t_env_list **env);
-void    pipeline_execution(t_parser *parser, t_env_list **envp);
-void    redirections(t_redirection *red, char *cmd);
+void    pipeline_execution(t_parser *parser, t_env_list **envp, int file);
+void    redirections(t_redirection *red, char *cmd, int file);
 
 
 char	*search(char **env, char *cmd);
 char	**find_path(char **envp);
 int	    find_path_env(char **envp, char *path);
 void	free_array(char **array);
-void    heredoc(t_parser **parse);
+int     heredoc(t_parser **parse);
 
 #endif

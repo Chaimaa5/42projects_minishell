@@ -1,10 +1,11 @@
-cd
-pwd
-env
-echo
-exit errors
 
 to do
 exit code
-export with pipe
 cat /dev/random | head  -c 100 | wc -c
+
+
+test:
+echo hhh | echo lll
+env | grep HOME
+echo lol > lol 
+echo lol > lol | echo Lolo >> lol

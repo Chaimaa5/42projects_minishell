@@ -22,7 +22,7 @@ int    redirection_out_to(t_redirection *red)
     return (output);
 }
 
-void    redirections(t_redirection *red, char *cmd)
+void    redirections(t_redirection *red, char *cmd, int file)
 {
     int output = -1;
     int input = -2;
@@ -33,6 +33,8 @@ void    redirections(t_redirection *red, char *cmd)
     {
         if (red->type == TOKEN_REDIN)
             input = redirection_in_from(red);
+        else if (red->type == TOKEN_HEREDOC)
+            input = file;
         else if (red->type == TOKEN_APPEND || red->type == TOKEN_REDOUT)
             output = redirection_out_to(red);
         if  (!red->next && cmd)

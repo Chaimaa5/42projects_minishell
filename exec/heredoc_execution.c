@@ -1,22 +1,27 @@
 #include "../inc/header.h"
 
-int random_file()
+char *random_file()
 {
-    static int file;
+    static int	random;
+    char		*tmp_file;
 
-    file += 1;
-    return (file); 
+    random += 2;
+    tmp_file = ft_strjoin("tmp/", ft_itoa(random));
+    return (tmp_file); 
 }
-void    heredoc(t_parser **parse)
+
+int    heredoc(t_parser **parse)
 {
-    // int file = random_file();
     int tmp_file;
     char *buff;
     t_parser *parser;
     t_redirection *red;
 
     parser = *parse;
-    tmp_file = open("tmp/file", O_WRONLY | O_CREAT | O_TRUNC, 0777);
+    tmp_file = open(random_file(), O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	printf("%d\n", tmp_file);
+	if (tmp_file < 0)
+		tmp_file *= -1;
     while (parser)
     {
         red = parser->red; 
@@ -36,4 +41,5 @@ void    heredoc(t_parser **parse)
         }
         parser = parser->next;
     }
+	return (tmp_file);
 } 
