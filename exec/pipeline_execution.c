@@ -33,19 +33,13 @@ void 	execute(t_parser *parser, char *path, char **envp, t_env_list *env)
 {
 	if (check_builtin(parser))
         exec_builtins(parser, env);
-	else if (!ft_strncmp(parser->cmd, "export", 8))
-	{
-        exec_export(parser, &env);
-		return ;
-	}
-	else if (!ft_strncmp(parser->cmd, "unset", 6))
-        exec_unset(&env, parser->args[1]);
 	else if (execve(path, parser->args, envp) == -1)
 	{
 		ft_putstr_fd("command not found: ", 2);
 		ft_putendl_fd(parser->cmd, 2);
 		exit(127);
 	}
+	exit(0);
 }
 
 void execute_last_cmd(t_parser *parser, t_env_list *env, int write_in, int file)
@@ -67,10 +61,12 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int write_in, int file)
 			close(write_in);
 		}
 		redirections(parser->red, parser->cmd, file);
-		if (parser->cmd)
+		if (parser->cmd && !(check_builtin(parser)))
 			execute(parser, path, envp, env);
 		exit(0);
 	}
+	if (check_builtin(parser))
+		exec_builtins(parser, env);
 }
 void	launch_child(t_parser *parser, t_env_list *env, int write_in, int *end, int file)
 {
@@ -89,7 +85,6 @@ void	launch_child(t_parser *parser, t_env_list *env, int write_in, int *end, int
 	if (parser->cmd)
 		execute(parser, path, envp, env);
 	exit(0);
-
 }
 
 void    pipeline_execution(t_parser *parser, t_env_list **envp, int file)
@@ -112,8 +107,6 @@ void    pipeline_execution(t_parser *parser, t_env_list **envp, int file)
 		close(end[WRITE]);
 		parser = parser->next;
 	}
-	if (check_builtin(parser))
-		exec_builtins(parser, env);
 	execute_last_cmd(parser, env, write_in, file);
 	while(waitpid(-1, &status, 0) > 0);
 }
