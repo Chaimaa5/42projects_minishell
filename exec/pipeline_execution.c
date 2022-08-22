@@ -3,35 +3,36 @@
 
 int		check_builtin(t_parser *parser)
 {
-	if (!ft_strncmp(parser->cmd, "cd", 3))
-		return (1);
-	else if (!ft_strncmp(parser->cmd, "pwd", 4))
-		return (1);
-	else if (!ft_strncmp(parser->cmd, "echo", 6))
-		return (1);
-	else if (!ft_strncmp(parser->cmd, "exit", 6))
-		return (1);
+	if (!ft_strncmp(parser->cmd, "cd", 3) || (!ft_strncmp(parser->cmd, "pwd", 4))
+		|| !ft_strncmp(parser->cmd, "echo", 6) || !ft_strncmp(parser->cmd, "exit", 6)
+		|| !ft_strncmp(parser->cmd, "env", 4) || !ft_strncmp(parser->cmd, "export", 8)
+		|| !ft_strncmp(parser->cmd, "unset", 6))
+			return (1);
 	return (0);
 }
 
-void	exec_builtins(t_parser **parse,  t_env_list **env)
+void 	exec_builtins(t_parser *parser, t_env_list *env)
 {
-    if (!ft_strncmp((*parse)->cmd, "cd", 3))
-		exec_cd((*parse)->args[1], *env);
-    else if (!ft_strncmp((*parse)->cmd, "pwd", 4))
+	if (!ft_strncmp(parser->cmd, "cd", 3))
+		exec_cd(parser->args[1], env);
+    else if (!ft_strncmp(parser->cmd, "pwd", 4))
         exec_pwd();
-	else if (!ft_strncmp((*parse)->cmd, "echo", 6))
-        exec_echo((*parse));
-    else if (!ft_strncmp((*parse)->cmd, "exit", 6))
-        exec_exit(*parse);
-    if (!ft_strncmp((*parse)->cmd, "env", 4))
-        exec_env((*parse), env);
+	else if (!ft_strncmp(parser->cmd, "echo", 6))
+        exec_echo(parser);
+    else if (!ft_strncmp(parser->cmd, "exit", 6))
+        exec_exit(parser);
+    else if (!ft_strncmp(parser->cmd, "env", 4))
+        exec_env(parser, &env);
+	else if (!ft_strncmp(parser->cmd, "export", 8))
+        exec_export(parser, &env);
+	else if (!ft_strncmp(parser->cmd, "unset", 6))
+        exec_unset(&env, parser->args[1]);
 }
 
 void 	execute(t_parser *parser, char *path, char **envp, t_env_list *env)
 {
 	if (check_builtin(parser))
-        exec_builtins(&parser, &env);
+        exec_builtins(parser, env);
 	else if (!ft_strncmp(parser->cmd, "export", 8))
 	{
         exec_export(parser, &env);
@@ -111,6 +112,8 @@ void    pipeline_execution(t_parser *parser, t_env_list **envp, int file)
 		close(end[WRITE]);
 		parser = parser->next;
 	}
+	if (check_builtin(parser))
+		exec_builtins(parser, env);
 	execute_last_cmd(parser, env, write_in, file);
 	while(waitpid(-1, &status, 0) > 0);
 }
