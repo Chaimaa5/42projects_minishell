@@ -26,7 +26,6 @@ int    heredoc(t_parser **parse)
         {
             if (red->type == TOKEN_HEREDOC)
             {
-                buff = readline("heredoc> ");
     			tmp_file = open(random_file(), O_WRONLY | O_CREAT | O_TRUNC, 0777);
 				if (tmp_file < 0)
 					tmp_file *= -3;
