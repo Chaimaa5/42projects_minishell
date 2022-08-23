@@ -11,3 +11,5 @@ echo lol > lol
 echo lol > lol | echo Lolo >> lol
 
 heredoc: cat << eof 
+'E'Cho -n a
+//cd case: cd fddfss --> OLDPWD

@@ -240,7 +240,7 @@ t_token *collect_string(t_lexer *lexer, t_env_list *env)
 		}
 		if(lexer->c == '"' || lexer->c == '\'')
 		{
-			join = ft_strjoin(join, join_to_join(lexer, lexer->c, env));
+			join = join_to_join(lexer, lexer->c, env);
 			value = ft_strjoin(value, join);
 			free(join);
 		}
