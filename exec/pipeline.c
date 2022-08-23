@@ -46,8 +46,13 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int file, in
 			dup2(fd_in, STDIN_FILENO);
 			close(fd_in);
 		}
+<<<<<<< HEAD
 		close(end[READ]);
 		close(fd_in);
+=======
+		if (end[WRITE] > 2)
+			close(end[WRITE]);
+>>>>>>> 244231496e6d485bc3bfaab9a2848237b51ee3b5
 		redirections(parser->red, parser->cmd, file);
 		if (parser->cmd)
 		{
@@ -63,6 +68,9 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int file, in
 				exit(127);
 			}
 		}
+		
+		if (fd_in != STDIN_FILENO)
+			close(fd_in);
 		exit(0);
 	}
 }
@@ -80,8 +88,15 @@ void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end, int fi
 	}
 	dup2(end[WRITE], STDOUT_FILENO);
 	close(end[WRITE]);
+<<<<<<< HEAD
 	close(end[READ]);
 	close(fd_in);
+=======
+	if (end[READ] > 2)
+		close(end[READ]);
+	if (end[WRITE] > 2)
+			close(end[WRITE]);
+>>>>>>> 244231496e6d485bc3bfaab9a2848237b51ee3b5
 	redirections(parser->red, parser->cmd, file);
 	if (check_builtin(parser) && parser->cmd)
         exec_builtins(parser, env);	
@@ -110,7 +125,10 @@ void    pipeline_execution(t_parser *parser, t_env_list **envp, int file)
 		if (pid == 0)
 			launch_child(parser, env, fd_in, end, file);
 		fd_in = end[READ];
-		close(end[WRITE]);
+		if (end[WRITE] > 2)
+			close(end[WRITE]);
+		if (fd_in != STDIN_FILENO)
+			close(fd_in);
 		parser = parser->next;
 	}
 	execute_last_cmd(parser, env, fd_in, file, end);
