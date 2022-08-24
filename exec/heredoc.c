@@ -12,11 +12,10 @@ char *random_file()
 
 int    heredoc(t_parser **parse)
 {
-    int tmp_file;
     char *buff;
     t_parser *parser;
     t_redirection *red;
-	tmp_file = -1;
+    int             end[2];
 
     parser = *parse;
     while (parser)
@@ -26,18 +25,17 @@ int    heredoc(t_parser **parse)
         {
             if (red->type == TOKEN_HEREDOC)
             {
-    			tmp_file = open(random_file(), O_WRONLY | O_CREAT | O_TRUNC, 0777);
-				if (tmp_file < 0)
-					tmp_file *= -3;
+                pipe(end);
                 while((strcmp(red->file, buff)))
                 {
                     buff = readline("heredoc> ");
-                    ft_putendl_fd(buff, tmp_file);
+                    ft_putendl_fd(buff, end[WRITE]);
                 }
             }
             red = red->next;
         }
         parser = parser->next;
     }
-	return (tmp_file);
+    close(end[WRITE]);
+	return (end[READ]);
 } 

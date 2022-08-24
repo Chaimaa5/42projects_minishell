@@ -110,7 +110,6 @@ int check_red(char *line)
 	{
 		if (line[i] && (line[i] == '<' || line[i] == '>'))
 		{
-
 			if (line[i] == '>' && line[i + 1] == '>')
 				i = check_after_red(line, i + 1);
 			else if(line[i] == '<' && line[i + 1] == '<')

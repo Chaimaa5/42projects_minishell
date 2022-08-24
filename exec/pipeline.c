@@ -124,6 +124,7 @@ void    pipeline_execution(t_parser *parser, t_env_list **envp, int file)
 		close(end[WRITE]);
 	if (fd_in != STDIN_FILENO)
 		close(fd_in);
+	close(file);
 	while(waitpid(-1, &status, 0) > 0);
 }
 
