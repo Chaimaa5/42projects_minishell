@@ -13,11 +13,17 @@ char	*pwd()
 
 void    exec_cd(char *path, t_env_list *env)
 {
+	char *old_pwd;
+
+	old_pwd = pwd();
     if (path == NULL || !ft_strncmp(path, "~", 2))
 	{
-		replace_value(&env, "OLDPWD", pwd());
 		if (search_env(&env, "HOME"))
+		{
 			chdir(get_env(&env, "HOME"));
+			replace_value(&env, "PWD", pwd());
+			replace_value(&env, "OLDPWD", old_pwd);
+		}
 		else
 		{
 			printf("cd: HOME not set\n");
@@ -26,13 +32,17 @@ void    exec_cd(char *path, t_env_list *env)
 	}
 	else
 	{
-		replace_value(&env, "OLDPWD", pwd());
 		if (chdir(path))
 		{
 			perror("cd: ");
 			exit_code = 1;
 		}
-		replace_value(&env, "PWD", pwd());
+		else
+		{
+			replace_value(&env, "PWD", pwd());
+			replace_value(&env, "OLDPWD", old_pwd);
+		}
+
 	}
 }
 
