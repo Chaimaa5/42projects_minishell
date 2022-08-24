@@ -46,15 +46,17 @@ int	check_doube(t_env_list **env, char *key)
 int	check_key(char *key)
 {
     int i;
+	char **keys;
 
     i = 1;
-    if (ft_isalpha(key[0]) || key[0] == '_')
+	keys = ft_split(key, '=');
+    if (ft_isalpha(keys[0][0]) || keys[0][0] == '_')
     {
-        while(key[i])
+        while(keys[0][i])
         {
-            if (!ft_isalnumdash(key[i]))
+            if (!ft_isalnumdash(keys[0][i]))
             {
-                printf("export: %s: not a valid identifier\n", key);
+                printf("export: %s: not a valid identifier\n", keys[0]);
 				exit_code = 1;
                 return (0);
             }

@@ -125,7 +125,8 @@ void exec_env(t_parser *parse, t_env_list **envp)
 	}
 	while (env)
 	{
-		printf("%s%s%s\n", env->key, env->separator, env->content);
+		if (env->separator && env->content)
+			printf("%s%s%s\n", env->key, env->separator, env->content);
 		env = env->next;
 	}
 }
