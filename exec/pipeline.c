@@ -64,9 +64,6 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int file, in
 					exit(127);
 				}
 			}
-
-			if (fd_in != STDIN_FILENO)
-				close(fd_in);
 		}
 		exit(0);
 	}
@@ -78,57 +75,55 @@ void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end, int fi
 
 	envp = t_env_list_to_char(&env);
 	path = search(envp, parser->cmd);
-	if (fd_in != 0)
+	if (fork() == 0)
 	{
-		dup2(fd_in, STDIN_FILENO);
-		close(fd_in);
-	}
-	dup2(end[WRITE], STDOUT_FILENO);
-	close(end[WRITE]);
-	if (end[READ] > 2)
-		close(end[READ]);
-	if (end[WRITE] > 2)
-			close(end[WRITE]);
-	if (!redirections(parser->red, parser->cmd, file))
-	{
-		if (check_builtin(parser) && parser->cmd)
-    	    exec_builtins(parser, env);	
-		else if (parser->cmd && (execve(path, parser->args, envp) == -1))
+		if (fd_in != 0)
 		{
-			ft_putstr_fd("command not found: ", 2);
-			ft_putendl_fd(parser->cmd, 2);
+			dup2(fd_in, STDIN_FILENO);
+			close(fd_in);
 		}
+		dup2(end[WRITE], STDOUT_FILENO);
+		close(end[WRITE]);
+		close(end[READ]);
+		if (!redirections(parser->red, parser->cmd, file))
+		{
+			if (check_builtin(parser) && parser->cmd)
+    		    exec_builtins(parser, env);	
+			else if (parser->cmd && (execve(path, parser->args, envp) == -1))
+			{
+				ft_putstr_fd("command not found: ", 2);
+				ft_putendl_fd(parser->cmd, 2);
+			}
+		}
+		exit(0);
 	}
-	exit(0);
 }
 
 void    pipeline_execution(t_parser *parser, t_env_list **envp, int file)
 {
-	pid_t pid;
+	int fd_in;
 	t_env_list *env;
 	int end[2];
-	int	fd_in;
 	int status;
 	
 	fd_in = 0;
 	env = (*envp);
 	while (parser->next)
 	{
-		pid = fork();
-		if (pid == 0)
-		{
 			pipe(end);
 			launch_child(parser, env, fd_in, end, file);
-		
-		fd_in = end[READ];
 		if (end[WRITE] > 2)
 			close(end[WRITE]);
 		if (fd_in != STDIN_FILENO)
 			close(fd_in);
-		}
+		fd_in = end[READ];
 		parser = parser->next;
 	}
 	execute_last_cmd(parser, env, fd_in, file, end);
+	if (end[WRITE] > 2)
+		close(end[WRITE]);
+	if (fd_in != STDIN_FILENO)
+		close(fd_in);
 	while(waitpid(-1, &status, 0) > 0);
 }
 
