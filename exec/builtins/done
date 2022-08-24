@@ -1,15 +1,15 @@
 
 to do
 exit code
-cat /dev/random | head  -c 100 | wc -c
 done : cat | > ff
-cat | cat | ls
-
+pwd | cd
+pwd | env
 test:
 echo hhh | echo lll
 env | grep HOME
 echo lol > lol 
 echo lol > lol | echo Lolo >> lol
+cat /dev/random | head  -c 100 | wc -c
 
 heredoc: cat << eof 
 'E'Cho -n a

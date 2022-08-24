@@ -12,6 +12,7 @@ void heredoc_implementation(char *delim, int *end)
             ft_putendl_fd(buff, end[WRITE]);
     }
 }
+
 int    heredoc(t_parser **parse)
 {
     t_parser *parser;

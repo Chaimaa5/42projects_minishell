@@ -29,11 +29,12 @@ void 	exec_builtins(t_parser *parser, t_env_list *env)
         exec_unset(&env, parser->args[1]);
 }
 
+
 void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int file, int *end)
 {
 	char	*path;
 	char	**envp;
-	int pid;
+	int		pid;
 
 	envp = t_env_list_to_char(&env);
 	path = search(envp, parser->cmd);
@@ -41,10 +42,7 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int file, in
 	if (pid == 0)
 	{
 		if (fd_in != 0)
-		{
-			dup2(fd_in, STDIN_FILENO);
-			close(fd_in);
-		}
+			dup_end(fd_in, STDIN_FILENO);
 		if (end[WRITE] > 2)
 			close(end[WRITE]);
 		if (!redirections(parser->red, parser->cmd, file))
@@ -67,6 +65,7 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int file, in
 		exit(0);
 	}
 }
+
 void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end, int file)
 {
 	char	*path;
@@ -77,12 +76,8 @@ void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end, int fi
 	if (fork() == 0)
 	{
 		if (fd_in != 0)
-		{
-			dup2(fd_in, STDIN_FILENO);
-			close(fd_in);
-		}
-		dup2(end[WRITE], STDOUT_FILENO);
-		close(end[WRITE]);
+			dup_end(fd_in, STDIN_FILENO);
+		dup_end(end[WRITE], STDOUT_FILENO);
 		close(end[READ]);
 		if (!redirections(parser->red, parser->cmd, file))
 		{
@@ -97,19 +92,23 @@ void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end, int fi
 		exit(0);
 	}
 }
-void	close_pipe(int *end, int fd_in)
+
+void	wait_child(void)
 {
-	if (end[WRITE] > 2)
-		close(end[WRITE]);
-	if (fd_in != STDIN_FILENO)
-		close(fd_in);
+	int status;
+
+	while(waitpid(-1, &status, 0) > 0)
+	{
+		if(WEXITSTATUS(status))
+			exit_code = WEXITSTATUS(status);
+	}
 }
+
 void    pipeline_execution(t_parser *parser, t_env_list **envp, int file)
 {
 	int fd_in;
 	t_env_list *env;
 	int end[2];
-	int status;
 	
 	fd_in = 0;
 	env = (*envp);
@@ -124,7 +123,7 @@ void    pipeline_execution(t_parser *parser, t_env_list **envp, int file)
 	execute_last_cmd(parser, env, fd_in, file, end);
 	close_pipe(end, fd_in);
 	close(file);
-	while(waitpid(-1, &status, 0) > 0);
+	wait_child();
 }
 
 

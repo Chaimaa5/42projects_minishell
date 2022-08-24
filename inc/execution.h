@@ -30,6 +30,8 @@ void    set_export(t_env_list *env,  char **args);
 void	replace_value(t_env_list  **env, char *key, char *value);
 void    print_export(t_env_list **env);
 int     check_key(char *key);
+int     check_doube(t_env_list **env, char *key);
+void	add_key(t_env_list *env,  char *args);
 
 
 //unset
@@ -48,4 +50,7 @@ int	    find_path_env(char **envp, char *path);
 void	free_array(char **array);
 int     heredoc(t_parser **parse);
 
+
+void	dup_end(int end, int dup_fd);
+void	close_pipe(int *end, int fd_in);
 #endif

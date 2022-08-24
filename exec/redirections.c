@@ -1,4 +1,5 @@
 #include "../inc/header.h"
+
 int isDir(char *file_name)
 {
    struct stat path_stat;
