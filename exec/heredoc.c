@@ -29,10 +29,9 @@ int    heredoc(t_parser **parse)
     			tmp_file = open(random_file(), O_WRONLY | O_CREAT | O_TRUNC, 0777);
 				if (tmp_file < 0)
 					tmp_file *= -3;
-                while((ft_strncmp(red->file, buff, ft_strlen(buff))))
+                while((strcmp(red->file, buff)))
                 {
                     buff = readline("heredoc> ");
-		            add_history(buff);
                     ft_putendl_fd(buff, tmp_file);
                 }
             }

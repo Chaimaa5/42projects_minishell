@@ -182,6 +182,7 @@ t_token *collect_apn_hrd(t_lexer *lexer, int i)
 
 	join = ft_strdup("");
 	value = ft_strdup("");
+	lexer_advance(lexer);
 	while (lexer->c == ' ')
 		lexer_advance(lexer);
 	while (lexer->c != '\0' && lexer->c != ' ' && lexer->c != '<' && lexer->c != '>' && lexer->c != '|')
