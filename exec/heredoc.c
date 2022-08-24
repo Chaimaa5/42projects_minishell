@@ -16,21 +16,20 @@ int    heredoc(t_parser **parse)
 {
     t_parser *parser;
     t_redirection *red;
-    int             end[2];
-
+    int end[2];
     parser = *parse;
+        pipe(end);
     while (parser)
     {
         red = parser->red; 
         while(red)
         {
-            pipe(end);
             if (red->type == TOKEN_HEREDOC)
                 heredoc_implementation(red->file, end);
-            close(end[WRITE]);
             red = red->next;
         }
         parser = parser->next;
     }
+        close(end[WRITE]);
 	return (end[READ]);
 } 

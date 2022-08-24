@@ -97,32 +97,37 @@ void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end, int fi
 		exit(0);
 	}
 }
-void	close_pipe(int *end, int fd_in)
-{
-	if (end[WRITE] > 2)
-		close(end[WRITE]);
-	if (fd_in != STDIN_FILENO)
-		close(fd_in);
-}
-void    pipeline_execution(t_parser *parser, t_env_list **envp, int file)
+
+void    pipeline_execution(t_parser *parser, t_env_list **envp)
 {
 	int fd_in;
 	t_env_list *env;
 	int end[2];
 	int status;
-	
+	int file = -1;
+
 	fd_in = 0;
 	env = (*envp);
 	while (parser->next)
 	{
+		if (parser->red->type == TOKEN_HEREDOC)
+			file = heredoc(&parser);
 		pipe(end);
 		launch_child(parser, env, fd_in, end, file);
-		close_pipe(end, fd_in);
+		if (end[WRITE] > 2)
+			close(end[WRITE]);
+		if (fd_in != STDIN_FILENO)
+			close(fd_in);
 		fd_in = end[READ];
 		parser = parser->next;
 	}
+	if (parser->red->type == TOKEN_HEREDOC)
+		file = heredoc(&parser);
 	execute_last_cmd(parser, env, fd_in, file, end);
-	close_pipe(end, fd_in);
+	if (end[WRITE] > 2)
+		close(end[WRITE]);
+	if (fd_in != STDIN_FILENO)
+		close(fd_in);
 	close(file);
 	while(waitpid(-1, &status, 0) > 0);
 }

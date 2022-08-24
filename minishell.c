@@ -35,7 +35,6 @@ int main(int ac, char **av, char **envp)
 		add_history(line);
 		if(parse)
 		{
-
 			hdc = heredoc(&parse);
 			pipeline_execution(parse, &env, hdc);
 		}
