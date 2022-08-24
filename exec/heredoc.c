@@ -1,18 +1,19 @@
 #include "../inc/header.h"
 
-char *random_file()
-{
-    static int	random;
-    char		*tmp_file;
-
-    random += 2;
-    tmp_file = ft_strjoin("/dev/null", ft_itoa(random));
-    return (tmp_file); 
-}
-
-int    heredoc(t_parser **parse)
+void heredoc_implementation(char *delim, int *end)
 {
     char *buff;
+
+    buff = NULL;
+    while((ft_strncmp(delim, buff, ft_strlen(delim))))
+    {
+        buff = readline("heredoc> ");
+        if ((ft_strncmp(delim, buff, ft_strlen(delim))))
+            ft_putendl_fd(buff, end[WRITE]);
+    }
+}
+int    heredoc(t_parser **parse)
+{
     t_parser *parser;
     t_redirection *red;
     int             end[2];
@@ -23,16 +24,9 @@ int    heredoc(t_parser **parse)
         red = parser->red; 
         while(red)
         {
-                pipe(end);
+            pipe(end);
             if (red->type == TOKEN_HEREDOC)
-            {
-                while((ft_strncmp(red->file, buff, ft_strlen(red->file))))
-                {
-                    buff = readline("heredoc> ");
-                    if ((ft_strncmp(red->file, buff, ft_strlen(red->file))))
-                        ft_putendl_fd(buff, end[WRITE]);
-                }
-            }
+                heredoc_implementation(red->file, end);
             close(end[WRITE]);
             red = red->next;
         }

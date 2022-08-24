@@ -29,7 +29,6 @@ void 	exec_builtins(t_parser *parser, t_env_list *env)
         exec_unset(&env, parser->args[1]);
 }
 
-
 void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int file, int *end)
 {
 	char	*path;

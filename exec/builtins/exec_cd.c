@@ -13,6 +13,15 @@ char	*pwd()
 	return (buff);
 }
 
+void	replace_pwd(t_env_list *env, char *old_pwd)
+{
+	if (old_pwd)
+		replace_value(&env, "OLDPWD", old_pwd);
+	else
+		replace_value(&env, "OLDPWD", get_env(&env, "PWD"));
+	replace_value(&env, "PWD", pwd());
+}
+
 void    exec_cd(char *path, t_env_list *env)
 {
 	char *old_pwd;
@@ -23,15 +32,11 @@ void    exec_cd(char *path, t_env_list *env)
 		if (search_env(&env, "HOME"))
 		{
 			chdir(get_env(&env, "HOME"));
-			if (old_pwd)
-				replace_value(&env, "OLDPWD", old_pwd);
-			else
-				replace_value(&env, "OLDPWD", get_env(&env, "PWD"));
-			replace_value(&env, "PWD", pwd());
+			replace_pwd(env, old_pwd);
 		}
 		else
 		{
-			printf("cd: HOME not set\n");
+			perror("cd: HOME not set");
 			exit_code = 1;
 		}
 	}
@@ -43,14 +48,6 @@ void    exec_cd(char *path, t_env_list *env)
 			exit_code = 1;
 		}
 		else
-		{
-			if (old_pwd)
-				replace_value(&env, "OLDPWD", old_pwd);
-			else
-				replace_value(&env, "OLDPWD", get_env(&env, "PWD"));
-			replace_value(&env, "PWD", pwd());
-		}
-
+			replace_pwd(env, old_pwd);
 	}
 }
-
