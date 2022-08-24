@@ -26,10 +26,11 @@ int    heredoc(t_parser **parse)
             if (red->type == TOKEN_HEREDOC)
             {
                 pipe(end);
-                while((strcmp(red->file, buff)))
+                while((ft_strncmp(red->file, buff, ft_strlen(red->file))))
                 {
                     buff = readline("heredoc> ");
-                    ft_putendl_fd(buff, end[WRITE]);
+                    if ((ft_strncmp(red->file, buff, ft_strlen(red->file))))
+                        ft_putendl_fd(buff, end[WRITE]);
                 }
             }
             red = red->next;
