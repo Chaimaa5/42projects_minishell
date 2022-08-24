@@ -7,6 +7,7 @@ char *add_value(char *value)
 	char *s;
 	j = 0;
 	i = 0;
+	
 	while(value[i])
 	{
 		if(value[i] >= 1 && value[i] <= 5)
@@ -24,6 +25,8 @@ char *add_value(char *value)
 	}
 	//free(value);
 	s[j] = '\0';
+	if(!s[0])
+		return(NULL);
 	return(s);
 }
 

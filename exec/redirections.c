@@ -18,6 +18,11 @@ int    redirection_out_to(t_redirection *red)
 {
     int output = 0;
 
+    if (!red->file)
+    {
+        perror("File");
+        return (-1);
+    }
     if (red->file)
     {
         if (red->type == TOKEN_REDOUT)
@@ -55,7 +60,7 @@ int    redirections(t_redirection *red, char *cmd, int file)
     int input = -2;
 
     if (!red)
-        return (0) ;
+        return (0);
     while (red)
     {
         if (red->type == TOKEN_REDIN)

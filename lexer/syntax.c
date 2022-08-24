@@ -123,13 +123,7 @@ int check_red(char *line)
 				return(0);
 		}
 		if(line[i] == '\'' || line[i] == '"')
-		{
-			y = i;
 			i = find_second_one(line, i);
-			if(y + 1 == i)
-				return(0);
-		}
-		
 		i++;
 	}
 	return(1);
