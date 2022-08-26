@@ -16,8 +16,16 @@ int is_numeric(char *ar)
 
 void    exec_exit(t_parser *parser)
 {
+    if (!parser->args[1])
+        exit(0);
     if (parser->args[2])
+    {
         ft_putendl_fd("exit: too many arguments", 2);
+        exit_code = 1;
+    }
     if (!is_numeric(parser->args[1]))
+    {
         ft_putendl_fd("exit: numeric argument required", 2);
+        exit_code = 255;
+    }
 }

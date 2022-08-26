@@ -54,5 +54,6 @@ void     heredoc(t_parser **parse);
 void	dup_end(int end, int dup_fd);
 void	close_pipe(int *end, int fd_in);
 int    redirection_out_to(t_redirection *red);
+void print_error(char *error, char *ar, int ex_code);
 
 #endif

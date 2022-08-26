@@ -2,7 +2,7 @@
 
 int isDir(char *file_name)
 {
-   struct stat path_stat;
+    struct stat path_stat;
     stat(file_name, &path_stat);
     return S_ISREG(path_stat.st_mode);
 }
@@ -34,8 +34,12 @@ int    redirection_out_to(t_redirection *red)
             output = open(red->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
         if (!isDir(red->file))
         {
-            ft_putstr_fd(red->file, 2);
-            ft_putendl_fd(": Is a directory", 2);
+            print_error(": Is a directory\n", red->file, 1);
+            return (-1);
+        }
+        else if (access(red->file, R_OK) != 0)
+        {
+            print_error(": Permission denied\n", red->file, 1);
             return (-1);
         }
         return (output);
@@ -43,14 +47,14 @@ int    redirection_out_to(t_redirection *red)
     return (-1);
 }
 
-void    dup_redirections(int input, int output)
+void    dup_redirections(int input, int output, char *cmd)
 {
      if (output != -3)
     {
         dup2(output, STDOUT_FILENO);
         close(output);
     }
-    if (input != -2)
+    if (input != -2 && cmd != '\0')
     {
         dup2(input, STDIN_FILENO);
         close(input);
@@ -82,7 +86,7 @@ int    redirections(t_redirection *red, char *cmd)
                 return (-1);
         }
         if  (!red->next || !cmd)
-            dup_redirections(input, output);
+            dup_redirections(input, output, cmd);
         red = red->next;
     }
     return (0);

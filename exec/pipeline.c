@@ -36,30 +36,23 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
 {
 	char	*path;
 	char	**envp;
-	int		pid;
 
 	envp = t_env_list_to_char(&env);
 	path = search(envp, parser->cmd);
-	pid = fork();
-	if (pid == 0)
+	if (!ft_strncmp(parser->cmd, "exit", 6))
+        exec_exit(parser);
+	else if (fork() == 0)
 	{
 		if (fd_in != 0)
 			dup_end(fd_in, STDIN_FILENO);
 		if (end[WRITE] > 2)
 			close(end[WRITE]);
-		if (!redirections(parser->red, parser->cmd))
+		if (!redirections(parser->red, parser->cmd) && parser->cmd)
 		{
-			if (parser->cmd)
-			{
-				if (check_builtin(parser) && parser->cmd)
+				if (check_builtin(parser))
         			exec_builtins(parser, env);
 				else if (execve(path, parser->args, envp) == -1)
-				{
-					ft_putstr_fd("command not found: ", 2);
-					ft_putendl_fd(parser->cmd, 2);
-					exit(127);
-				}
-			}
+					print_error(parser->cmd, "command not found: ", 127);
 		}
 	}
 }
@@ -82,10 +75,7 @@ void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end)
 			if (check_builtin(parser) && parser->cmd)
     		    exec_builtins(parser, env);	
 			else if (parser->cmd && (execve(path, parser->args, envp) == -1))
-			{
-				ft_putstr_fd("command not found: ", 2);
-				ft_putendl_fd(parser->cmd, 2);
-			}
+				print_error("command not found: ", parser->cmd, 2);
 		}
 		exit(0);
 	}
