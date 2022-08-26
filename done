@@ -1,14 +1,15 @@
 
-to do
-exit code
-done : cat | > ff
+# to do
+# exit code
+# cat << eof > l | cat << eof >> l
+
+done : 
+cat | > ff
 pwd | cd
 pwd | env
 test:
 echo hhh | echo lll
 env | grep HOME
-echo lol > lol 
 echo lol > lol | echo Lolo >> lol
 cat /dev/random | head  -c 100 | wc -c
-
 'E'Cho -n a

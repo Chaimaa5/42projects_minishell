@@ -27,6 +27,8 @@ void 	exec_builtins(t_parser *parser, t_env_list *env)
         exec_export(parser, &env);
 	else if (!ft_strncmp(parser->cmd, "unset", 6))
         exec_unset(&env, parser->args[1]);
+	if (parser->flag == 1 || parser->red)
+		exit(0);
 }
 
 
@@ -49,16 +51,8 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
 		{
 			if (parser->cmd)
 			{
-				if (check_builtin(parser) && parser->cmd && !parser->red)
-				{
+				if (check_builtin(parser) && parser->cmd)
         			exec_builtins(parser, env);
-					return ;
-				}
-				else if (check_builtin(parser) && parser->cmd && parser->red)
-				{
-        			exec_builtins(parser, env);
-					exit(0);
-				}
 				else if (execve(path, parser->args, envp) == -1)
 				{
 					ft_putstr_fd("command not found: ", 2);
@@ -67,7 +61,6 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
 				}
 			}
 		}
-		exit(0);
 	}
 }
 
@@ -124,6 +117,8 @@ void    pipeline_execution(t_parser *parser, t_env_list **envp)
 		close_pipe(end, fd_in);
 		fd_in = end[READ];
 		parser = parser->next;
+		if (parser)
+			parser->flag = 1;
 	}
 	execute_last_cmd(parser, env, fd_in, end);
 	close_pipe(end, fd_in);
