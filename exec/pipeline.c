@@ -13,7 +13,7 @@ int		check_builtin(t_parser *parser)
 
 void 	exec_builtins(t_parser *parser, t_env_list *env)
 {
-	if (!ft_strncmp(parser->cmd, "cd", 3))
+	if (!ft_strncmp(parser->cmd, "cd", 3) )
 		exec_cd(parser->args[1], env);
     else if (!ft_strncmp(parser->cmd, "pwd", 4) || !ft_strncmp(parser->cmd, "PWD", 4))
         exec_pwd(env);
@@ -30,7 +30,7 @@ void 	exec_builtins(t_parser *parser, t_env_list *env)
 }
 
 
-void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int file, int *end)
+void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
 {
 	char	*path;
 	char	**envp;
@@ -45,14 +45,19 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int file, in
 			dup_end(fd_in, STDIN_FILENO);
 		if (end[WRITE] > 2)
 			close(end[WRITE]);
-		if (!redirections(parser->red, parser->cmd, file))
+		if (!redirections(parser->red, parser->cmd))
 		{
 			if (parser->cmd)
 			{
-				if (check_builtin(parser) && parser->cmd)
+				if (check_builtin(parser) && parser->cmd && !parser->red)
 				{
         			exec_builtins(parser, env);
 					return ;
+				}
+				else if (check_builtin(parser) && parser->cmd && parser->red)
+				{
+        			exec_builtins(parser, env);
+					exit(0);
 				}
 				else if (execve(path, parser->args, envp) == -1)
 				{
@@ -66,7 +71,7 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int file, in
 	}
 }
 
-void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end, int file)
+void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end)
 {
 	char	*path;
 	char	**envp;
@@ -79,7 +84,7 @@ void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end, int fi
 			dup_end(fd_in, STDIN_FILENO);
 		dup_end(end[WRITE], STDOUT_FILENO);
 		close(end[READ]);
-		if (!redirections(parser->red, parser->cmd, file))
+		if (!redirections(parser->red, parser->cmd))
 		{
 			if (check_builtin(parser) && parser->cmd)
     		    exec_builtins(parser, env);	
@@ -104,7 +109,7 @@ void	wait_child(void)
 	}
 }
 
-void    pipeline_execution(t_parser *parser, t_env_list **envp, int file)
+void    pipeline_execution(t_parser *parser, t_env_list **envp)
 {
 	int fd_in;
 	t_env_list *env;
@@ -115,14 +120,13 @@ void    pipeline_execution(t_parser *parser, t_env_list **envp, int file)
 	while (parser->next)
 	{
 		pipe(end);
-		launch_child(parser, env, fd_in, end, file);
+		launch_child(parser, env, fd_in, end);
 		close_pipe(end, fd_in);
 		fd_in = end[READ];
 		parser = parser->next;
 	}
-	execute_last_cmd(parser, env, fd_in, file, end);
+	execute_last_cmd(parser, env, fd_in, end);
 	close_pipe(end, fd_in);
-	close(file);
 	wait_child();
 }
 

@@ -11,5 +11,4 @@ echo lol > lol
 echo lol > lol | echo Lolo >> lol
 cat /dev/random | head  -c 100 | wc -c
 
-heredoc: cat << eof 
 'E'Cho -n a

@@ -40,17 +40,19 @@ int     ft_count_elems(char **str);
 
 
 void 	exec_builtins(t_parser *parser, t_env_list *env);
-void    pipeline_execution(t_parser *parser, t_env_list **envp, int file);
-int     redirections(t_redirection *red, char *cmd, int file);
+void    pipeline_execution(t_parser *parser, t_env_list **envp);
+int     redirections(t_redirection *red, char *cmd);
 
 
 char	*search(char **env, char *cmd);
 char	**find_path(char **envp);
 int	    find_path_env(char **envp, char *path);
 void	free_array(char **array);
-int     heredoc(t_parser **parse);
+void     heredoc(t_parser **parse);
 
 
 void	dup_end(int end, int dup_fd);
 void	close_pipe(int *end, int fd_in);
+int    redirection_out_to(t_redirection *red);
+
 #endif

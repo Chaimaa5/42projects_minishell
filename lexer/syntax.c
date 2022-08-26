@@ -130,11 +130,6 @@ int check_red(char *line)
 
 int ft_syntax_error(char *line)
 {
-	if (!line)
-	{
-		write(1, "exit\n", 6);
-		exit(0);
-	}
 	if(!check_quotes(line))
 	{
 		printf("Quotes: syntax error\n");

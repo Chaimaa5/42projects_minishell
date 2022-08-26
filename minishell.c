@@ -14,12 +14,12 @@
 // 	signal(SIGQUIT, SIG_IGN);
 // 	signal(SIGINT, handler);
 // }
+
 int main(int ac, char **av, char **envp)
 {
 	t_token		token;
 	t_parser	*parse;
 	t_env_list	*env;
-	int hdc;
 	env = env_builder(envp);
 	char *line;
 	(void) ac;
@@ -28,6 +28,11 @@ int main(int ac, char **av, char **envp)
 	{
 		// hd_sg();
 		line = readline("minishell: ");
+		if (!line)
+		{
+			write(1, "exit\n", 6);
+			exit(0);
+		}
 		if(ft_syntax_error(line))
 			parse = lexing(line, &token, env);
 		else
@@ -35,8 +40,13 @@ int main(int ac, char **av, char **envp)
 		add_history(line);
 		if(parse)
 		{
-			hdc = heredoc(&parse);
-			pipeline_execution(parse, &env, hdc);
+			heredoc(&parse);
+			pipeline_execution(parse, &env);
+		}
+		if (!line)
+		{
+		write(1, "exit\n", 6);
+		exit(0);
 		}
 	}
 	return (0);

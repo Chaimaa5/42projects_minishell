@@ -9,7 +9,9 @@ int isDir(char *file_name)
 
 int    redirection_in_from(t_redirection *red)
 {
-	if (access(red->file, F_OK) == 0)
+    if (red->type == TOKEN_HEREDOC)
+        return(red->end);
+	else if (access(red->file, F_OK) == 0)
 		return (open(red->file, O_RDONLY, 0777));
 	else
 		return (-1);
@@ -55,7 +57,7 @@ void    dup_redirections(int input, int output)
     }
 }
 
-int    redirections(t_redirection *red, char *cmd, int file)
+int    redirections(t_redirection *red, char *cmd)
 {
     int output = -3;
     int input = -2;
@@ -64,7 +66,7 @@ int    redirections(t_redirection *red, char *cmd, int file)
         return (0);
     while (red)
     {
-        if (red->type == TOKEN_REDIN)
+        if (red->type == TOKEN_REDIN || red->type == TOKEN_HEREDOC)
         {
             input = redirection_in_from(red);
             if (input == -1)
@@ -73,8 +75,6 @@ int    redirections(t_redirection *red, char *cmd, int file)
                 return (-1);
             }
         }
-        else if (red->type == TOKEN_HEREDOC)
-            input = file;
         else if (red->type == TOKEN_APPEND || red->type == TOKEN_REDOUT)
         {
             output = redirection_out_to(red);

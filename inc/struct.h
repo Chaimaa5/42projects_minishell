@@ -30,6 +30,7 @@ typedef struct s_redirection
 {
     int    type;
     char    *file;
+    int     end;
     struct s_redirection *next;
 } t_redirection;
 

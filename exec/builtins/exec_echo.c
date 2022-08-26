@@ -5,6 +5,8 @@ int compare(char *arg)
     int i;
 
     i = 1;
+    if (arg[1] == '\0')
+        return (0);
     while (arg[i])
     {
         if (arg[i] != 'n')
@@ -16,11 +18,8 @@ int compare(char *arg)
 
 int check_echo(char *args)
 {
-    if (args[0] == '-')
-    {
-        if (compare(args))
-            return (1);
-    }
+    if (args[0] == '-' && compare(args))
+        return (1);
     return (0);
 }
 
