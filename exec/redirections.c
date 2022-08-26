@@ -49,12 +49,12 @@ int    redirection_out_to(t_redirection *red)
 
 void    dup_redirections(int input, int output, char *cmd)
 {
-     if (output != -3)
+     if (output != -3 && cmd)
     {
         dup2(output, STDOUT_FILENO);
         close(output);
     }
-    if (input != -2 && cmd != '\0')
+    if (input != -2 && cmd)
     {
         dup2(input, STDIN_FILENO);
         close(input);
@@ -85,7 +85,7 @@ int    redirections(t_redirection *red, char *cmd)
             if (output == -1)
                 return (-1);
         }
-        if  (!red->next || !cmd)
+        if  (!red->next)
             dup_redirections(input, output, cmd);
         red = red->next;
     }
