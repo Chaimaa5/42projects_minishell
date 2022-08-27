@@ -7,17 +7,29 @@ void execute(t_env_list *env, t_parser *parser)
 	char	**envp;
 
 	envp = t_env_list_to_char(&env);
-	path = search(envp, parser->cmd);
+	if (parser->cmd[0] == '.' || parser->cmd[0] == '/')
+	{
+		path = parser->cmd;
+		if (access(path, X_OK))
+		{
+			print_error2(": Permission denied", path, 126);
+			// exit(126);
+		}
+	}
+	else
+		path = search(envp, parser->cmd);
 	if ((execve(path, parser->args, envp) == -1))
 	{
 		if (parser->next)
-			print_error(parser->cmd, "command not found: ", 0);
+			print_error2(parser->cmd, "command not found: ", 0);
 		else
 		{
-			print_error(parser->cmd, "command not found: ", 127);
-			exit(127);
+			print_error2(parser->cmd, "command not found: ", 127);
+			// exit(127);
 		}
 	}
+	else
+		exit_status = 0;
 	free_array(envp);
 	free(path);
 }
@@ -39,7 +51,7 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
 				else
 					execute(env, parser);
 		}
-		exit(0);
+		exit(exit_status);
 	}
 }
 
@@ -58,7 +70,7 @@ void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end)
 			else
 				execute(env, parser);
 		}
-		exit(0);
+		exit(exit_status);
 	}
 }
 
@@ -69,7 +81,7 @@ void	wait_child(void)
 	while(waitpid(-1, &status, 0) > 0)
 	{
 		if(WEXITSTATUS(status))
-			exit_code = WEXITSTATUS(status);
+			exit_status = WEXITSTATUS(status);
 	}
 }
 
@@ -86,15 +98,16 @@ void    pipeline_execution(t_parser *parser, t_env_list **envp)
 		parser->flag = 1;
 		pipe(end);
 		launch_child(parser, env, fd_in, end);
-			close_pipe(end, fd_in);
+		close_pipe(end, fd_in);
 		fd_in = end[READ];
 		parser = parser->next;
 		if (parser)
 			parser->flag = 1;
 	}
 	execute_last_cmd(parser, env, fd_in, end);
-if (fd_in != STDIN_FILENO)
-		close(fd_in);	wait_child();
+	if (fd_in != STDIN_FILENO)
+		close(fd_in);
+	wait_child();
 }
 
 

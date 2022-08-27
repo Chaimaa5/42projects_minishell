@@ -1,19 +1,19 @@
 #include "inc/header.h"
 #include "struct.h"
 
-// void    handler()
-// {
-//     rl_replace_line("", 0);
-//     ft_putchar_fd('\n', 1);
-//     rl_on_new_line();
-//     rl_redisplay();
-//     return;
-// }
-// void hd_sg()
-// {
-// 	signal(SIGQUIT, SIG_IGN);
-// 	signal(SIGINT, handler);
-// }
+void    handler()
+{
+    // rl_replace_line("", 0);
+    ft_putchar_fd('\n', 1);
+    rl_on_new_line();
+    rl_redisplay();
+    return;
+}
+void hd_sg()
+{
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handler);
+}
 
 int main(int ac, char **av, char **envp)
 {
@@ -43,9 +43,9 @@ int main(int ac, char **av, char **envp)
 			heredoc(&parse);
 			pipeline_execution(parse, &env);
 		}
-		free(line);
-		free(parse->cmd);
-		free(parse);
+		// free(line);
+		// free(parse->cmd);
+		// free(parse);
 	}
 	return (0);
 }

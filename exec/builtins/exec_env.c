@@ -76,8 +76,13 @@ void exec_env(t_parser *parse, t_env_list **envp)
 	}
 	while (env)
 	{
-		if (env->separator && env->content)
-			printf("%s%s%s\n", env->key, env->separator, env->content);
+		if (env->separator)
+		{
+			printf("%s%s", env->key, env->separator);
+			if (env->content)
+				printf("%s", env->content);
+			printf("\n");
+		}
 		env = env->next;
 	}
 }

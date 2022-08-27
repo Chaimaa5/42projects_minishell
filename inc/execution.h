@@ -58,5 +58,6 @@ void    print_error(char *error, char *ar, int ex_code);
 int		check_builtin(t_parser *parser);
 void 	exec_builtins(t_parser *parser, t_env_list *env);
 int parent_builtins(t_parser *parser);
+void print_error2(char *error, char *ar, int ex_code);
 
 #endif
