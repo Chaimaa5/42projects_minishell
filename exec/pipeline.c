@@ -40,13 +40,29 @@ int parent_builtins(t_parser *parser)
 	return (0);
 }
 
-void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
+void execute(t_env_list *env, t_parser *parser)
 {
 	char	*path;
 	char	**envp;
 
 	envp = t_env_list_to_char(&env);
 	path = search(envp, parser->cmd);
+	if ((execve(path, parser->args, envp) == -1))
+	{
+		if (parser->next)
+			print_error(parser->cmd, "command not found: ", 0);
+		else
+		{
+			print_error(parser->cmd, "command not found: ", 127);
+			exit(127);
+		}
+	}
+	free_array(envp);
+	free(path);
+}
+
+void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
+{
 	if (!parser->red && parent_builtins(parser) &&  parser->flag != 1)
         exec_builtins(parser, env);
 	else if (fork() == 0)
@@ -59,11 +75,8 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
 		{
 				if (check_builtin(parser))
         			exec_builtins(parser, env);
-				else if (execve(path, parser->args, envp) == -1)
-				{
-					print_error(parser->cmd, "command not found: ", 127);
-					exit(127);
-				}
+				else
+					execute(env, parser);
 		}
 		exit(0);
 	}
@@ -71,11 +84,6 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
 
 void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end)
 {
-	char	*path;
-	char	**envp;
-
-	envp = t_env_list_to_char(&env);
-	path = search(envp, parser->cmd);
 	if (fork() == 0)
 	{
 		if (fd_in != 0)
@@ -86,8 +94,8 @@ void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end)
 		{
 			if (check_builtin(parser) && parser->cmd)
     		    exec_builtins(parser, env);	
-			else if (parser->cmd && (execve(path, parser->args, envp) == -1))
-				print_error("command not found: ", parser->cmd, 2);
+			else
+				execute(env, parser);
 		}
 		exit(0);
 	}
@@ -117,8 +125,7 @@ void    pipeline_execution(t_parser *parser, t_env_list **envp)
 		parser->flag = 1;
 		pipe(end);
 		launch_child(parser, env, fd_in, end);
-		if (end[WRITE] > 2)
-			close(end[WRITE]);
+			close_pipe(end, fd_in);
 		fd_in = end[READ];
 		parser = parser->next;
 		if (parser)

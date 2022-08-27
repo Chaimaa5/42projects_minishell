@@ -43,11 +43,9 @@ int main(int ac, char **av, char **envp)
 			heredoc(&parse);
 			pipeline_execution(parse, &env);
 		}
-		if (!line)
-		{
-		write(1, "exit\n", 6);
-		exit(0);
-		}
+		free(line);
+		free(parse->cmd);
+		free(parse);
 	}
 	return (0);
 }
