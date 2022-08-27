@@ -39,7 +39,7 @@ void print_args(char **args)
             }
             else
                 printf("%s", args[i]);
-            if (args[i + 1] != '\0')
+            if (args[i + 1] != NULL)
                 printf(" ");
         }
         i++;
@@ -60,7 +60,7 @@ void print_without_option(char **args)
         }
         else
             printf("%s", args[i]);
-        if (args[i + 1] != '\0')
+        if (args[i + 1] != NULL)
             printf(" ");
         i++;
     }

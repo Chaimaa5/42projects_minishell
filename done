@@ -22,3 +22,5 @@ event: 0
 exit -1
 permission denied
 cat Makefile  > ff  |echo >> ff| echo wach >> ff
+
+cat Makefile  > f > ff |echo dfdfsfds >> ff: not done
