@@ -54,6 +54,9 @@ void     heredoc(t_parser **parse);
 void	dup_end(int end, int dup_fd);
 void	close_pipe(int *end, int fd_in);
 int    redirection_out_to(t_redirection *red);
-void print_error(char *error, char *ar, int ex_code);
+void    print_error(char *error, char *ar, int ex_code);
+int		check_builtin(t_parser *parser);
+void 	exec_builtins(t_parser *parser, t_env_list *env);
+int parent_builtins(t_parser *parser);
 
 #endif
