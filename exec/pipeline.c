@@ -11,10 +11,7 @@ void execute(t_env_list *env, t_parser *parser)
 	{
 		path = parser->cmd;
 		if (access(path, X_OK))
-		{
 			print_error2(": Permission denied", path, 126);
-			// exit(126);
-		}
 	}
 	else
 		path = search(envp, parser->cmd);
@@ -23,10 +20,7 @@ void execute(t_env_list *env, t_parser *parser)
 		if (parser->next)
 			print_error2(parser->cmd, "command not found: ", 0);
 		else
-		{
 			print_error2(parser->cmd, "command not found: ", 127);
-			// exit(127);
-		}
 	}
 	else
 		exit_status = 0;
