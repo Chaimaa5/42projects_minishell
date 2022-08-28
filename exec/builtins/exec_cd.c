@@ -35,7 +35,7 @@ void    exec_cd(char *path, t_env_list *env)
 			replace_pwd(env, old_pwd);
 		}
 		else
-			print_error("cd: HOME not set", NULL, 1);
+			print_error("cd: HOME not set\n", NULL, 1);
 	}
 	else
 	{

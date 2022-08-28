@@ -26,7 +26,7 @@
 // 	return (dst);
 // }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char  *s1, char  *s2)
 {
 	char	*result;
 	int i;
@@ -45,5 +45,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 			result[i++] = s2[j++];
 	}
 	result[i] = '\0';
+	free(s1);
 	return (result);
 }
