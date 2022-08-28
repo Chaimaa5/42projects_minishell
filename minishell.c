@@ -43,9 +43,13 @@ int main(int ac, char **av, char **envp)
 			heredoc(&parse);
 			pipeline_execution(parse, &env);
 		}
-		// free(line);
-		// free(parse->cmd);
-		// free(parse);
+		free(line);
+		if (parse)
+		{
+		free(parse->cmd);
+		free(parse->args);
+		free(parse);
+		}
 	}
 	return (0);
 }

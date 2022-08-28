@@ -30,7 +30,7 @@ void    replace_value(t_env_list  **env, char *key, char *value)
         if (!ft_strncmp(tmp->key, key, (ft_strlen(key) + 1)))
 		{
 			tmp->separator = "=";
-            tmp->content = value;
+            tmp->content = ft_strdup(value);
 		}
         tmp = tmp->next;
     }
@@ -55,7 +55,6 @@ void	add_key(t_env_list *env,  char *args)
         tmp = new_env(args, NULL, NULL);
         env_add_back(&env, tmp);
     }  
-    free(temp);
 }
 
 void set_export(t_env_list *env,  char **args)

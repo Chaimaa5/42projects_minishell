@@ -75,5 +75,5 @@ void    exec_echo(t_parser *parser)
         print_args(parser->args);
     else
         print_without_option(parser->args);
-    exit_status = 0;
+    exit(0);
 }

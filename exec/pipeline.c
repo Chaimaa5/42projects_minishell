@@ -11,7 +11,10 @@ void execute(t_env_list *env, t_parser *parser)
 	{
 		path = parser->cmd;
 		if (access(path, X_OK))
+		{
 			print_error2(": Permission denied", path, 126);
+			exit(126);
+		}
 	}
 	else
 		path = search(envp, parser->cmd);
@@ -22,10 +25,9 @@ void execute(t_env_list *env, t_parser *parser)
 		else
 			print_error2(parser->cmd, "command not found: ", 127);
 	}
-	else
-		exit_status = 0;
 	free_array(envp);
 	free(path);
+	exit(exit_status);
 }
 
 void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
@@ -45,7 +47,7 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
 				else
 					execute(env, parser);
 		}
-		exit(exit_status);
+		exit(0);
 	}
 }
 
@@ -64,7 +66,7 @@ void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end)
 			else
 				execute(env, parser);
 		}
-		exit(exit_status);
+		exit(0);
 	}
 }
 
@@ -76,6 +78,8 @@ void	wait_child(void)
 	{
 		if(WEXITSTATUS(status))
 			exit_status = WEXITSTATUS(status);
+		else
+			exit_status = 0;
 	}
 }
 
