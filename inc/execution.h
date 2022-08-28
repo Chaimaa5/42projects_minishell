@@ -40,7 +40,7 @@ int     ft_count_elems(char **str);
 
 
 void 	exec_builtins(t_parser *parser, t_env_list *env);
-void    pipeline_execution(t_parser *parser, t_env_list **envp);
+void    pipeline_execution(t_parser **parser, t_env_list **envp);
 int     redirections(t_redirection *red, char *cmd);
 
 

@@ -152,6 +152,5 @@ int ft_syntax_error(char *line)
 		exit_status = 258;
 		return(0);
 	}
-	else
-		return(1);
+	return(1);
 }

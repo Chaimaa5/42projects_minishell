@@ -24,13 +24,15 @@ void    heredoc(t_parser **parse)
         red = parser->red; 
         while(red)
         {
+            pipe(end);
             if (red->type == TOKEN_HEREDOC)
             {
-                pipe(end);
                 heredoc_implementation(red->file, end[WRITE]);
                 red->end = end[READ];
-                close(end[WRITE]);
             }
+            close(end[WRITE]);
+            // if (red->next)
+            //     close(end[READ]);
             red = red->next;
         }
         parser = parser->next;
