@@ -39,7 +39,9 @@ void    exec_cd(char *path, t_env_list *env)
 	}
 	else
 	{
-		if (chdir(path))
+		if (path[0] == '\0')
+			return ;
+		else if (chdir(path))
 			print_error2(": No such file or directory", path, 1);
 		else
 			replace_pwd(env, old_pwd);

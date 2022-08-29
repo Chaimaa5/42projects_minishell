@@ -5,7 +5,7 @@ int is_numeric(char *ar)
     int i;
 
     i = 0;
-    if (ar[0] == '-')
+    if (ar[0] == '-' || ar[0] == '+')
         i++;
     while (ar[i])
     {

@@ -22,23 +22,29 @@ void delete_node(t_env_list *current, char *key)
     }
 }
 
-void    exec_unset(t_env_list **env, char *key)
+void    exec_unset(t_env_list **env, char **key)
 {
     t_env_list    *current;
     t_env_list    *temp;
+    int            i;
 
     current = *env;
-    if (!key)
-        return ;
-    else if (check_key(key))
+    i = 1;
+    while (key[i])
     {
-        if (!ft_strncmp((*env)->key, key, ft_strlen(key)))
+        if (!key[i])
+            return ;
+        else if (check_key(key[i]))
         {
-                temp = (*env);
-                (*env) = (*env)->next;
-                free(temp);
+            if (!ft_strncmp((*env)->key, key[i], ft_strlen(key[i])))
+            {
+                    temp = (*env);
+                    (*env) = (*env)->next;
+                    free(temp);
+            }
+            else
+                delete_node(current, key[i]);
         }
-        else
-            delete_node(current, key);
+        i++;
     }
 }

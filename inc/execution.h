@@ -12,7 +12,7 @@ void    exec_env(t_parser *parse, t_env_list **envp);
 void    exec_exit(t_parser *parser);
 void    exec_export(t_parser *parse, t_env_list **envp);
 void    exec_pwd(t_env_list *env);
-void    exec_unset(t_env_list **env, char *key);
+void    exec_unset(t_env_list **env, char **key);
 
 //t_env_list
 t_env_list	*env_last(t_env_list *lst);
