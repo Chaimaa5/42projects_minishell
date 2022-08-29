@@ -62,7 +62,10 @@ void	wait_child(void)
 	while(waitpid(-1, &status, 0) > 0)
 	{
 		if(WEXITSTATUS(status))
+		{
 			exit_status = WEXITSTATUS(status);
+			printf("exit: %d\n", exit_status);
+		}
 		else
 			exit_status = 0;
 	}
