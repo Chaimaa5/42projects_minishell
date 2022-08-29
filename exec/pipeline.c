@@ -59,15 +59,14 @@ void	wait_child(void)
 {
 	int status;
 
-	while(waitpid(-1, &status, 0) > 0)
+	exit_status = 0;
+	while(waitpid(0, &status, 0) > 0)
 	{
 		if(WEXITSTATUS(status))
 		{
 			exit_status = WEXITSTATUS(status);
 			printf("exit: %d\n", exit_status);
 		}
-		else
-			exit_status = 0;
 	}
 }
 void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end)
