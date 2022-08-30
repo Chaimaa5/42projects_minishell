@@ -31,7 +31,19 @@ void execute(t_env_list *env, t_parser *parser)
 	free_array(envp);
 	free(path);
 }
+void close_heredoc_pipes(t_redirection **redirection)
+{
+	t_redirection *red = *redirection;
+	while(red->next)
+	{
+		if (red->type == TOKEN_HEREDOC){
+                printf("%d\n",  red->end);
 
+			close(red->end);
+		}
+		red = red->next;
+	}
+}
 void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
 {
 	if (!parser->red && parent_builtins(parser) &&  parser->flag != 1)
@@ -49,6 +61,7 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
 				else
 					execute(env, parser);
 		}
+		
 		// else
 		// 	exit(1);
 		exit(exit_status);
@@ -64,8 +77,11 @@ void	wait_child(void)
 	{
 		if(WEXITSTATUS(status))
 			exit_status = WEXITSTATUS(status);
+		// else if (WIFSIGNALED(status) > 130)
+		// 	exit_status = WIFSIGNALED(status) ;
 	}
 }
+
 void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end)
 {
 	pid_t pid = fork();
@@ -95,6 +111,7 @@ void    pipeline_execution(t_parser **parse, t_env_list **envp)
 	t_env_list *env;
 	int end[2];
 	t_parser *parser;
+	t_redirection *red;
 
 	parser = *parse;
 	fd_in = 0;
@@ -102,19 +119,20 @@ void    pipeline_execution(t_parser **parse, t_env_list **envp)
 	while (parser->next)
 	{
 		parser->flag = 1;
+		red = parser->red;
 		pipe(end);
 		launch_child(parser, env, fd_in, end);
 		close_pipe(end, fd_in);
+		// close_heredoc_pipes(&red);
 		fd_in = end[READ];
 		parser = parser->next;
 		if (parser)
 			parser->flag = 1;
 	}
+	red = parser->red;
 	execute_last_cmd(parser, env, fd_in, end);
+	// close_heredoc_pipes(&red);
 	if (fd_in != STDIN_FILENO)
 		close(fd_in);
 	wait_child();
 }
-
-
-
