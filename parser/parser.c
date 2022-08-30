@@ -34,6 +34,8 @@ char **add_args_to_list(char **args, t_token *token)
 
 	count = count_args(args);
 	i = -1;
+	if(count)
+		free(args);
 	new_args = malloc(sizeof(char *) * (count + 2));
 	while(++i < count)
 		new_args[i] = args[i];
@@ -57,6 +59,8 @@ t_parser *add_parse(t_parser *parse, t_token *token, t_vr_tools *tools)
 	{
 		tmp = new_parse(tools->cmd , tools->args, tools->red);
 		parser_add_back(&parse, tmp);
+		free(tools->cmd);
+		free(token->content);
 		tools->red = NULL;
 		tools->cmd = NULL;
 		tools->args = NULL;
@@ -82,11 +86,10 @@ t_vr_tools *init_tools()
 	return(tools);
 }
 
-t_parser *lexing(char *line, t_token *token, t_env_list *env)
+t_parser *lexing(char *line, t_token *token, t_env_list *env, t_vr_tools *tools)
 {
 	t_lexer *lexer;
 	t_parser *parse;
-	t_vr_tools *tools;
 
 	parse = NULL;
 	tools = init_tools();
@@ -111,7 +114,6 @@ t_parser *lexing(char *line, t_token *token, t_env_list *env)
 		free(tools->cmd);
 		free(tools);
 		free(lexer);
-
 	}
 	return(parse);
 }

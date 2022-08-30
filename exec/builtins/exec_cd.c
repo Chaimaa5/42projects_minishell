@@ -33,6 +33,7 @@ void    exec_cd(char *path, t_env_list *env)
 		{
 			chdir(get_env(&env, "HOME"));
 			replace_pwd(env, old_pwd);
+			free(old_pwd);
 		}
 		else
 			print_error("cd: HOME not set\n", NULL, 1);
@@ -44,6 +45,9 @@ void    exec_cd(char *path, t_env_list *env)
 		else if (chdir(path))
 			print_error2(": No such file or directory", path, 1);
 		else
+		{
 			replace_pwd(env, old_pwd);
+			free(old_pwd);
+		}
 	}
 }

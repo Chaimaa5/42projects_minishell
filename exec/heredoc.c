@@ -2,7 +2,10 @@
 void    handle()
 {
 	exit_status = 130;
-    exit(exit_status);
+    rl_replace_line("", 0);
+    ft_putchar_fd('\n', 1);
+    rl_on_new_line();
+    rl_redisplay();
     return;
 }
 
@@ -15,20 +18,17 @@ void handler_heredoc_sg()
 void heredoc_implementation(char *delim, int end)
 {
     char *buff;
-    pid_t pid;
 
     buff = NULL;
-    pid = fork();
-    if (pid == 0)
-    {
+ 
         while((ft_strncmp(delim, buff, ft_strlen(delim))))
         {
-            handler_heredoc_sg();
+            // handler_heredoc_sg();
             buff = readline("> ");
             if ((ft_strncmp(delim, buff, ft_strlen(delim))))
                 ft_putendl_fd(buff, end);
         }
-    }
+    
 }
 
 void    heredoc(t_parser **parse)
