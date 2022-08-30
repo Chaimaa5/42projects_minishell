@@ -7,6 +7,7 @@ void heredoc_implementation(char *delim, int end)
     buff = NULL;
     while((ft_strncmp(delim, buff, ft_strlen(delim))))
     {
+        hd_sg();
         buff = readline("> ");
         if ((ft_strncmp(delim, buff, ft_strlen(delim))))
             ft_putendl_fd(buff, end);
@@ -24,15 +25,13 @@ void    heredoc(t_parser **parse)
         red = parser->red; 
         while(red)
         {
-            pipe(end);
             if (red->type == TOKEN_HEREDOC)
             {
+                pipe(end);
                 heredoc_implementation(red->file, end[WRITE]);
-                red->end = end[READ];
+                close(end[WRITE]);
+                red->end = dup(end[READ]);
             }
-            close(end[WRITE]);
-            // if (red->next)
-            //     close(end[READ]);
             red = red->next;
         }
         parser = parser->next;

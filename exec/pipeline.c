@@ -49,8 +49,8 @@ void execute_last_cmd(t_parser *parser, t_env_list *env, int fd_in, int *end)
 				else
 					execute(env, parser);
 		}
-		else
-			exit(1);
+		// else
+		// 	exit(1);
 		exit(exit_status);
 	}
 }
@@ -63,10 +63,7 @@ void	wait_child(void)
 	while(waitpid(0, &status, 0) > 0)
 	{
 		if(WEXITSTATUS(status))
-		{
 			exit_status = WEXITSTATUS(status);
-			printf("exit: %d\n", exit_status);
-		}
 	}
 }
 void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end)
@@ -85,8 +82,8 @@ void	launch_child(t_parser *parser, t_env_list *env, int fd_in, int *end)
 			else
 				execute(env, parser);
 		}
-		else
-			exit(1);
+		// else
+		// 	exit(1);
 		exit(exit_status);
 	}
 }

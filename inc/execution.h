@@ -60,5 +60,9 @@ void 	exec_builtins(t_parser *parser, t_env_list *env);
 int parent_builtins(t_parser *parser);
 int print_error2(char *error, char *ar, int ex_code);
 char	*join_env(char const *s1, char const *s2);
+void    dup_redirections(int input, int output, char *cmd);
+
+void hd_sg();
+void    handler();
 
 #endif
