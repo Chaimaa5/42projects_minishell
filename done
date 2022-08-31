@@ -39,3 +39,5 @@ echo $?USER
 heredoc 
 ctrl + d
 ctrl + c
+
+export #

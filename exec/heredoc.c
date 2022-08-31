@@ -2,14 +2,10 @@
 void    handle_c()
 {
 	exit_status = 130;
-    // rl_replace_line("", 0);
-    // ft_putchar_fd('\n', 1);
-    // rl_on_new_line();
-    // rl_redisplay();
     exit(130);
 }
 
-void handler_heredoc_sg(int end)
+void handler_heredoc_sg()
 {
 	signal(SIGINT, handle_c);
 }
@@ -18,18 +14,19 @@ void heredoc_implementation(char *delim, int end)
     char *buff;
 
     buff = NULL;
-    // if (fork() == 0)
-    // {
+    if (fork() == 0)
+    {
         while((ft_strncmp(delim, buff, ft_strlen(delim))))
         {
-            // handler_heredoc_sg(end);
+            handler_heredoc_sg();
             buff = readline("> ");
             if (!buff)
-                break;
+                exit(1);
             if ((ft_strncmp(delim, buff, ft_strlen(delim))))
                 ft_putendl_fd(buff, end);
         }
-    // }
+        exit(0);
+    }
 }
 
 void    heredoc(t_parser **parse)
