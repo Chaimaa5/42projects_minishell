@@ -18,10 +18,13 @@ void	replace_pwd(t_env_list *env, char *old_pwd)
 	char *pwd;
 
 	pwd = get_pwd();
-	if (old_pwd)
-		replace_value(&env, "OLDPWD", old_pwd);
-	else
-		replace_value(&env, "OLDPWD", get_env(&env, "PWD"));
+	if (search_env(&env, "OLDPWD"))
+	{
+		if (old_pwd)
+			replace_value(&env, "OLDPWD", old_pwd);
+		else
+			replace_value(&env, "OLDPWD", get_env(&env, "PWD"));
+	}
 	replace_value(&env, "PWD", pwd);
 	free(pwd);
 }
@@ -44,7 +47,10 @@ void    exec_cd(char *path, t_env_list *env)
 	else
 	{
 		if (path[0] == '\0')
+		{
+			free(old_pwd);
 			return ;
+		}
 		else if (chdir(path))
 			print_error2(": No such file or directory", path, 1);
 		else

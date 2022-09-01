@@ -15,7 +15,7 @@ void append_value(t_env_list  **env, char *key_a, char *value)
 			if (!tmp->content)
 				tmp->content = ft_strdup(value);
 			else
-            	tmp->content = ft_strjoin(tmp->content, ft_strdup(value));
+            	tmp->content = ft_strjoin(tmp->content, value);
 		}
         tmp = tmp->next;
     }

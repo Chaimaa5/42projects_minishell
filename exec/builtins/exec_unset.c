@@ -16,6 +16,8 @@ void delete_node(t_env_list *current, char *key)
 				current->next = NULL;
 				break;
 			}
+            free(temp->key);
+            free(temp->content);
             free(temp);
         }
         current = current->next;
@@ -40,6 +42,8 @@ void    exec_unset(t_env_list **env, char **key)
             {
                     temp = (*env);
                     (*env) = (*env)->next;
+                    free(temp->key);
+                    free(temp->content);
                     free(temp);
             }
             else
