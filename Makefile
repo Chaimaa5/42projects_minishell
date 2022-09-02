@@ -6,7 +6,8 @@ SRC = minishell.c lexer/lexer.c lexer/tokenizer.c parser/parser.c parser/redirec
 		lexer/collect_lexer.c lexer/lexer_tools.c lexer/syntax.c exec/redirections.c exec/builtins/exec_export.c \
 		exec/builtins/exec_echo.c exec/builtins/exec_unset.c exec/builtins/exec_exit.c exec/heredoc.c \
 		lexer/dolar_and_tools.c exec/utils/env_tools.c exec/utils/cmd_utils.c exec/utils/export_utils.c \
-		exec/utils/error_management.c exec/builtins.c
+		exec/utils/error_management.c exec/builtins.c parser/parse_tools.c  \
+		lexer/lexer_tools_2.c lexer/syntax_tools.c lexer/dolar_tools.c
 LIB = libft.a
 RDLINE=  -lreadline -L /Users/cel-mhan/goinfre/.brew/opt/readline/lib -I /Users/cel-mhan/goinfre/.brew/opt/readline/include
 
