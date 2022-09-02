@@ -77,8 +77,7 @@ void	wait_child(void)
 	{
 		if(WEXITSTATUS(status))
 			exit_status = WEXITSTATUS(status);
-		printf("%d--\n",exit_status );
-		// else if (WIFSIGNALED(status) > 130)
+		// else if (WIFSIGNALED(status) > 129)
 		// 	exit_status = WIFSIGNALED(status) ;
 	}
 }
