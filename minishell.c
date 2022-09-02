@@ -12,7 +12,7 @@ void    handler()
 }
 void hd_sg()
 {
-	if (signal(SIGQUIT, SIG_IGN))
+	if (!signal(SIGQUIT, SIG_IGN))
 		exit_status = 1;
 	signal(SIGINT, handler);
 }
