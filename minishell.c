@@ -3,17 +3,17 @@
 
 void    handler()
 {
-	exit_status = 130;
+	exit_status = 1;
     rl_replace_line("", 0);
     ft_putchar_fd('\n', 1);
     rl_on_new_line();
     rl_redisplay();
     return;
 }
+
 void hd_sg()
 {
-	if (!signal(SIGQUIT, SIG_IGN))
-		exit_status = 1;
+	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, handler);
 }
 void free_leaks(t_parser *parse)

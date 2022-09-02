@@ -21,7 +21,7 @@ void    exec_exit(t_parser *parser)
      if (!parser->args[1])
      {
         ft_putendl_fd("exit", 1);
-        exit(0);
+        exit(exit_status);
      }
     if (parser->args[2])
     {

@@ -1,40 +1,30 @@
 #include "../inc/header.h"
-// void    handle_c()
-// {
-	
-// }
 
-// void handler_heredoc_sg()
-// {
-
-// }
 void heredoc_implementation(char *delim, int end)
 {
     char *buff;
 
     buff = NULL;
-    // if (fork() == 0)
-    // {
+    signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+    if (fork() == 0)
+    {
         while((ft_strncmp(delim, buff, ft_strlen(delim))))
         {
-            // handler_heredoc_sg();
+            signal(SIGINT, SIG_DFL);
+		    signal(SIGQUIT, SIG_DFL);
             buff = readline("> ");
-            // if (signal(SIGINT, NULL))
-            // {
-            //     exit_status = 130;
-            //     break;
-            // }
             if (!buff)
             {
                 free(buff);
-                break;
+                exit(1);
             }
             if ((ft_strncmp(delim, buff, ft_strlen(delim))))
                 ft_putendl_fd(buff, end);
             free(buff);
         }
-    //     exit(0);
-    // }
+        exit(211);
+    }
 }
 
 void    heredoc(t_parser **parse)
@@ -52,6 +42,7 @@ void    heredoc(t_parser **parse)
             {
                 pipe(end);
                 heredoc_implementation(red->file, end[WRITE]);
+                wait_child(1);
                 red->end = end[READ];
                 close(end[WRITE]);
             }

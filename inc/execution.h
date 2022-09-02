@@ -63,5 +63,5 @@ void    dup_redirections(int input, int output, char *cmd);
 
 void hd_sg();
 void    handler();
-
+void	wait_child(int i);
 #endif

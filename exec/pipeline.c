@@ -31,6 +31,7 @@ void execute(t_env_list **env, t_parser *parser)
 	free_array(envp);
 	free(path);
 }
+
 void close_heredoc_pipes(t_redirection *red)
 {
 	if (red)
@@ -46,10 +47,14 @@ void close_heredoc_pipes(t_redirection *red)
 void execute_last_cmd(t_parser *parser, t_redirection **redi, t_env_list **env, int fd_in, int *end)
 {
 	t_redirection *red=  *redi;
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	if (!red && parent_builtins(parser) &&  parser->flag != 1)
         exec_builtins(parser, env);
 	else if (fork() == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (fd_in != 0)
 			dup_end(fd_in, STDIN_FILENO);
 		if (end[WRITE] > 2)
@@ -61,33 +66,41 @@ void execute_last_cmd(t_parser *parser, t_redirection **redi, t_env_list **env, 
 				else
 					execute(env, parser);
 		}
-		
-		else
-			exit(1);
 		exit(exit_status);
 	}
 }
 
-void	wait_child(void)
+void	wait_child(int i)
 {
 	int status;
 
-	exit_status = 0;
 	while(waitpid(0, &status, 0) > 0)
 	{
-		if(WEXITSTATUS(status))
+		if(WEXITSTATUS(status) && !i)
 			exit_status = WEXITSTATUS(status);
-		// else if (WIFSIGNALED(status) > 129)
-		// 	exit_status = WIFSIGNALED(status) ;
+		else if (WIFSIGNALED(status))
+		{
+			if (!i)
+				exit_status = WIFSIGNALED(status) + 129;
+			else
+				exit_status = WIFSIGNALED(status);
+		}
+		i = 1;
 	}
+	if(!i)
+		exit_status = 0;
 }
 
 void	launch_child(t_parser *parser, t_redirection **redi, t_env_list **env, int fd_in, int *end)
 {
 	t_redirection *red = *redi;
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	pid_t pid = fork();
 	if (pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		if (fd_in != 0)
 			dup_end(fd_in, STDIN_FILENO);
 		dup_end(end[WRITE], STDOUT_FILENO);
@@ -99,8 +112,6 @@ void	launch_child(t_parser *parser, t_redirection **redi, t_env_list **env, int 
 			else
 				execute(env, parser);
 		}
-		else
-			exit(1);
 		exit(exit_status);
 	}
 }
@@ -130,5 +141,5 @@ void    pipeline_execution(t_parser **parse, t_env_list **env)
 	close_heredoc_pipes(parser->red);
 	if (fd_in != STDIN_FILENO)
 		close(fd_in);
-	wait_child();
+	wait_child(0);
 }

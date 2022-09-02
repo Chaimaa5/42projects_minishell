@@ -84,7 +84,6 @@ char *add_dolar(t_lexer *lexer)
 
 char *join_dolar(char *dolar, t_env_list *env)
 {
-	printf("%d-----\n",exit_status);
 	if(!dolar)
 		return(NULL);
 	if(get_env(&env, dolar))
