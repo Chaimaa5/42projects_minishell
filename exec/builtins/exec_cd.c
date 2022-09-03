@@ -37,7 +37,18 @@ void	replace_pwd(t_env_list **env, char *old_pwd)
 		else
 			replace_value(env, "OLDPWD", get_env(env, "PWD"));
 	}
-	replace_value(env, "PWD", pwd);
+	else
+	{
+		add_key((*env), "OLDPWD");
+		replace_value(env, "OLDPWD", old_pwd);
+	}
+	if (search_env(env, "PWD"))
+		replace_value(env, "PWD", pwd);
+	else
+	{
+		add_key((*env), "PWD");
+		replace_value(env, "PWD", pwd);
+	}
 	free(pwd);
 }
 
