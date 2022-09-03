@@ -58,7 +58,7 @@ void	free_leaks(t_parser *parse)
 	}
 }
 
-void	minishell(char *line, t_env_list *env)
+void	minishell(char *line, t_env_list **env)
 {
 	t_token		token;
 	t_parser	*parse;
@@ -66,14 +66,14 @@ void	minishell(char *line, t_env_list *env)
 
 	tools = NULL;
 	if (ft_syntax_error(line))
-		parse = lexing(line, &token, env, tools);
+		parse = lexing(line, &token, (*env), tools);
 	else
 		parse = NULL;
 	add_history(line);
 	if (parse)
 	{
 		heredoc(&parse);
-		pipeline_execution(&parse, &env);
+		pipeline_execution(&parse, env);
 	}
 	free(line);
 	free_leaks(parse);
@@ -91,7 +91,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		hd_sg();
 		line = readline("minishell: ");
-		minishell(line, env);
+		minishell(line, &env);
 	}
 	return (0);
 }

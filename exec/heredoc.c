@@ -15,11 +15,13 @@
 void	heredoc_implementation(char *delim, int end)
 {
 	char	*buff;
+	pid_t	pid;
 
 	buff = NULL;
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
-	if (fork() == 0)
+	pid = fork();
+	if (pid == 0)
 	{
 		while ((ft_strncmp(delim, buff, (ft_strlen(delim) + 1))))
 		{
@@ -55,9 +57,9 @@ void	heredoc(t_parser **parse)
 			{
 				pipe(end);
 				heredoc_implementation(red->file, end[WRITE]);
-				wait_child(1);
 				red->end = end[READ];
 				close(end[WRITE]);
+				wait_child(1);
 			}
 			red = red->next;
 		}
