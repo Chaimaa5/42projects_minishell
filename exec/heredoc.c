@@ -29,7 +29,7 @@ void	heredoc_implementation(char *delim, int end)
 			if (!buff)
 			{
 				free(buff);
-				exit(1);
+				exit(0);
 			}
 			if ((ft_strncmp(delim, buff, ft_strlen(delim))))
 				ft_putendl_fd(buff, end);

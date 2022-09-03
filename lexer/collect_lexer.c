@@ -63,7 +63,10 @@ t_token	*collect_red(t_lexer *lexer, int i, t_env_list *env)
 	{
 		value = add_all_in_value(value, lexer->c, lexer, env);
 		if (!sp_c(lexer->c) || x)
+		{
+			x = 0;
 			lexer_advance(lexer);
+		}
 		if (lexer->c == '"' || lexer->c == '\'')
 		{
 			x = 1;
