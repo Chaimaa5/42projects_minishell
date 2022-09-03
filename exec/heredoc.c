@@ -19,14 +19,12 @@ void	heredoc_implementation(char *delim, int end)
 
 	buff = NULL;
 	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
 	if (pid == 0)
 	{
 		while ((ft_strncmp(delim, buff, (ft_strlen(delim) + 1))))
 		{
 			signal(SIGINT, SIG_DFL);
-			signal(SIGQUIT, SIG_DFL);
 			buff = readline("> ");
 			if (!buff)
 			{

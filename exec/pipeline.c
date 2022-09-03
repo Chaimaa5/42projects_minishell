@@ -37,12 +37,9 @@ void	wait_child(int i)
 		if (i == 0)
 		{
 			if (WEXITSTATUS(status))
-			{
 				g_exit_status = WEXITSTATUS(status);
-				i = 3;
-			}
-			else if (WIFSIGNALED(status) && i != 3)
-				g_exit_status = WIFSIGNALED(status) + 129;
+			else if (WTERMSIG(status) == 2 ||  WTERMSIG(status) == 3)
+				g_exit_status = WTERMSIG(status) + 128;
 		}
 		else if (i == 1)
 		{
