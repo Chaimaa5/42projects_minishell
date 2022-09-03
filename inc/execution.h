@@ -26,10 +26,10 @@ int         search_env(t_env_list  **env, char *key);
 char        *get_env(t_env_list  **env, char *key);
 
 //export
-void    set_export(t_env_list *env,  char **args);
+void    set_export(t_env_list *env,  char **args, int i);
 void	replace_value(t_env_list  **env, char *key, char *value);
 void    print_export(t_env_list **env);
-int     check_key(char *key);
+int     check_key(char *key, int i);
 int     check_doube(t_env_list **env, char *key);
 void	add_key(t_env_list *env,  char *args);
 
@@ -41,10 +41,11 @@ int     ft_count_elems(char **str);
 
 void 	exec_builtins(t_parser *parser, t_env_list **env);
 void    pipeline_execution(t_parser **parser, t_env_list **envp);
-int     redirections(t_redirection *red, char *cmd);
+int     redirections(t_redirection *red, char *cmd, int output, int input);
+void	execute(t_env_list **env, t_parser *parser);
 
 
-char	*search(char **env, char *cmd);
+char	*search(char **env, char *cmd, int i);
 char	**find_path(char **envp);
 int	    find_path_env(char **envp, char *path);
 void	free_array(char **array);

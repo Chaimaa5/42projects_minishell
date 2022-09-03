@@ -36,8 +36,4 @@ cat << eof > l | cat << eof > l: not  done
 echo $?USER
 
 
-heredoc 
-ctrl + d
-ctrl + c
-
-export #
+//pwd and oldpwd after unset
