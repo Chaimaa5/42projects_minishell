@@ -53,7 +53,8 @@ int	parent_builtins(t_parser *parser)
 	else if (!ft_strncmp(parser->cmd, "exit", 6)
 		|| !ft_strncmp(parser->cmd, "env", 4)
 		|| !ft_strncmp(parser->cmd, "export", 8)
-		|| !ft_strncmp(parser->cmd, "unset", 6))
+		|| !ft_strncmp(parser->cmd, "unset", 6)
+		|| !ft_strncmp(parser->cmd, "echo", 6))
 		return (1);
 	return (0);
 }

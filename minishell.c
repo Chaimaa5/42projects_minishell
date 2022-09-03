@@ -1,21 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cel-mhan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/03 04:36:26 by cel-mhan          #+#    #+#             */
+/*   Updated: 2022/09/03 04:36:27 by cel-mhan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "inc/header.h"
 #include "struct.h"
 
-// void    handler()
-// {
-// 	g_exit_status = 130;
-//     rl_replace_line("", 0);
-//     ft_putchar_fd('\n', 1);
-//     rl_on_new_line();
-//     rl_redisplay();
-//     return;
-// }
-// void hd_sg()
-// {
-// 	if (!signal(SIGQUIT, SIG_IGN))
-// 		g_exit_status = 1;
-// 	signal(SIGINT, handler);
-// }
+void	handler(int sig)
+{
+	(void)sig;
+	g_exit_status = 1;
+	rl_replace_line("", 0);
+	ft_putchar_fd('\n', 1);
+	rl_on_new_line();
+	rl_redisplay();
+	return ;
+}
+
+void	hd_sg(void)
+{
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, handler);
+}
 
 void	free_leaks(t_parser *parse)
 {
@@ -76,7 +89,7 @@ int	main(int ac, char **av, char **envp)
 	(void) av;
 	while ("everything is okey")
 	{
-		//hd_sg();
+		hd_sg();
 		line = readline("minishell: ");
 		minishell(line, env);
 	}

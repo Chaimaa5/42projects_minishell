@@ -21,7 +21,7 @@ void	heredoc_implementation(char *delim, int end)
 	signal(SIGQUIT, SIG_IGN);
 	if (fork() == 0)
 	{
-		while ((ft_strncmp(delim, buff, ft_strlen(delim))))
+		while ((ft_strncmp(delim, buff, (ft_strlen(delim) + 1))))
 		{
 			signal(SIGINT, SIG_DFL);
 			signal(SIGQUIT, SIG_DFL);

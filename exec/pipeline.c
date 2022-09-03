@@ -30,26 +30,28 @@ void	wait_child(int i)
 {
 	int	status;
 
+	if (!i && g_exit_status != 1)
+		g_exit_status = 0;
 	while (waitpid(0, &status, 0) > 0)
 	{
 		if (i == 0)
 		{
 			if (WEXITSTATUS(status))
+			{
 				g_exit_status = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status) && !WEXITSTATUS(status))
+				i = 3;
+			}
+			else if (WIFSIGNALED(status) && i != 3)
 				g_exit_status = WIFSIGNALED(status) + 129;
 		}
 		else if (i == 1)
 		{
 			if (WEXITSTATUS(status))
 				g_exit_status = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
+			if (WIFSIGNALED(status))
 				g_exit_status = WIFSIGNALED(status);
 		}
-		i = 2;
 	}
-	if (!i)
-		g_exit_status = 0;
 }
 
 void	execute_last_cmd(t_parser **p, t_env_list **env, int fd_in, int *end)
@@ -73,7 +75,7 @@ void	execute_last_cmd(t_parser **p, t_env_list **env, int fd_in, int *end)
 			else
 				execute(env, (*p));
 		}
-		exit(g_exit_status);
+		exit(0);
 	}
 }
 
@@ -96,7 +98,7 @@ void	launch_child(t_parser **parser, t_env_list **env, int fd_in, int *end)
 			else
 				execute(env, (*parser));
 		}
-		exit(g_exit_status);
+		exit(0);
 	}
 }
 

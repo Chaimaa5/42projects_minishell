@@ -92,8 +92,8 @@ t_token	*collect_apn_hrd(t_lexer *lexer, int i)
 			join = join_to_join(lexer, lexer->c, NULL);
 			value = ft_strjoin(value, join);
 			free(join);
+			lexer_advance(lexer);
 		}
-		lexer_advance(lexer);
 	}
 	return (init_token(i, value));
 }

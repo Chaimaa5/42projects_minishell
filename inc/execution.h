@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cel-mhan <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/03 04:35:34 by cel-mhan          #+#    #+#             */
+/*   Updated: 2022/09/03 04:35:36 by cel-mhan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef EXECUTION_H
 # define EXECUTION_H
 
@@ -46,8 +58,6 @@ int			parent_builtins(t_parser *parser);
 int			print_error2(char *error, char *ar, int ex_code);
 char		*join_env(char const *s1, char const *s2);
 void		dup_redirections(int input, int output, char *cmd);
-void		hd_sg(void);
-void		handler(void);
 void		execute(t_env_list **env, t_parser *parser);
 void		wait_child(int i);
 

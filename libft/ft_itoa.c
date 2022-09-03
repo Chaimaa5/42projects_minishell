@@ -65,4 +65,3 @@ char	*ft_itoa(int n)
 	str[len] = '\0';
 	return (str);
 }
-

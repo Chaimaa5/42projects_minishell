@@ -25,7 +25,7 @@ int	redirection_in_from(t_redirection *red)
 	if (red->type == TOKEN_HEREDOC)
 		return (red->end);
 	else if (access(red->file, F_OK) == 0)
-		return (open(red->file, O_RDONLY, 0777));
+		return (open(red->file, O_RDONLY, 0655));
 	else
 		return (-1);
 }
@@ -58,9 +58,9 @@ int	redirection_out_to(t_redirection *red)
 	if (red->file)
 	{
 		if (red->type == TOKEN_REDOUT)
-			output = open(red->file, O_WRONLY | O_CREAT | O_TRUNC, 0777);
+			output = open(red->file, O_WRONLY | O_CREAT | O_TRUNC, 0655);
 		else if (red->type == TOKEN_APPEND)
-			output = open(red->file, O_WRONLY | O_CREAT | O_APPEND, 0777);
+			output = open(red->file, O_WRONLY | O_CREAT | O_APPEND, 0655);
 		if (check_file(red->file))
 			return (-1);
 		return (output);
