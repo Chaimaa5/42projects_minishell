@@ -22,11 +22,11 @@ static int	spaces(char c)
 	return (0);
 }
 
-int	ft_atoi(const char *str)
+long long	ft_atoi(const char *str)
 {
-	unsigned long	res;
-	int				sign;
-	int				i;
+	long long	res;
+	int			sign;
+	int			i;
 
 	res = 0;
 	sign = 1;
@@ -39,9 +39,9 @@ int	ft_atoi(const char *str)
 		i++;
 	while ((str[i] >= '0') && (str[i] <= '9'))
 		res = res * 10 + ((int)str[i++] - '0');
-	if (res > 2147483648 && sign == -1)
-		return (0);
-	if (res > 2147483647 && sign != -1)
+	if (res < -9223372036854775807 + 1)
+		return (-1);
+	if (res > 9223372036854775807)
 		return (-1);
 	return (res * sign);
 }

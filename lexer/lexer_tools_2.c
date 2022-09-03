@@ -24,7 +24,7 @@ char	*join_to_join(t_lexer *lexer, char c, t_env_list *env)
 		q = 1;
 	while (lexer->c != c && lexer->c != '\0')
 	{
-		if (lexer->c == '$' && q == 1)
+		if (lexer->c == '$' && q == 1 && env)
 			value = dolar_q(lexer, env, value);
 		if (lexer->c != c)
 			value = join_char(lexer, value);

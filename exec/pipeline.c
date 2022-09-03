@@ -32,7 +32,7 @@ void	wait_child(int i)
 
 	if (!i && g_exit_status != 1)
 		g_exit_status = 0;
-	while (waitpid(0, &status, 0) > 0)
+	while (waitpid(0, &status, WUNTRACED) > 0)
 	{
 		if (i == 0)
 		{
