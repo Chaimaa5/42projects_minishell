@@ -65,7 +65,7 @@ int	red_type(int type)
 
 t_parser	*parse_value(t_parser *parse, t_token *token, t_vr_tools *tools)
 {
-	if (red_type(token->type))
+	if (red_type(token->e_type))
 	tools->red = add_red_to_list(token, tools);
 	parse = add_parse(parse, token, tools);
 	free(token);

@@ -81,7 +81,7 @@ char	*join_dolar(char *dolar, t_env_list *env)
 	else if (!dolar[0])
 		return (ft_strdup("$"));
 	else if (dolar[0] == '?' && !dolar[1])
-		return (ft_itoa(exit_status));
+		return (ft_itoa(g_exit_status));
 	return (NULL);
 }
 

@@ -3,7 +3,7 @@
 
 // void    handler()
 // {
-// 	exit_status = 130;
+// 	g_exit_status = 130;
 //     rl_replace_line("", 0);
 //     ft_putchar_fd('\n', 1);
 //     rl_on_new_line();
@@ -13,7 +13,7 @@
 // void hd_sg()
 // {
 // 	if (!signal(SIGQUIT, SIG_IGN))
-// 		exit_status = 1;
+// 		g_exit_status = 1;
 // 	signal(SIGINT, handler);
 // }
 

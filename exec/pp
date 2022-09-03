@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pipeline.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: cel-mhan <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/03 01:00:40 by cel-mhan          #+#    #+#             */
-/*   Updated: 2022/09/03 01:00:41 by cel-mhan         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../inc/header.h"
 #include "../inc/execution.h"
 
@@ -24,32 +12,6 @@ void	close_heredoc_pipes(t_redirection *red)
 			red = red->next;
 		}
 	}
-}
-
-void	wait_child(int i)
-{
-	int	status;
-
-	while (waitpid(0, &status, 0) > 0)
-	{
-		if (i == 0)
-		{
-			if (WEXITSTATUS(status))
-				g_exit_status = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status) && !WEXITSTATUS(status))
-				g_exit_status = WIFSIGNALED(status) + 129;
-		}
-		else if (i == 1)
-		{
-			if (WEXITSTATUS(status))
-				g_exit_status = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				g_exit_status = WIFSIGNALED(status);
-		}
-		i = 2;
-	}
-	if (!i)
-		g_exit_status = 0;
 }
 
 void	execute_last_cmd(t_parser **p, t_env_list **env, int fd_in, int *end)
@@ -75,6 +37,27 @@ void	execute_last_cmd(t_parser **p, t_env_list **env, int fd_in, int *end)
 		}
 		exit(g_exit_status);
 	}
+}
+
+void	wait_child(int i)
+{
+	int	status;
+
+	while (waitpid(0, &status, 0) > 0)
+	{
+		if (WEXITSTATUS(status) && !i)
+			g_exit_status = WEXITSTATUS(status);
+		else if (WIFSIGNALED(status))
+		{
+			if (!i)
+				g_exit_status = WIFSIGNALED(status) + 129;
+			else
+				g_exit_status = WIFSIGNALED(status);
+		}
+		i = 1;
+	}
+	if (!i)
+		g_exit_status = 0;
 }
 
 void	launch_child(t_parser **parser, t_env_list **env, int fd_in, int *end)

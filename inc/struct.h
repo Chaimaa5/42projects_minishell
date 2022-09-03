@@ -66,7 +66,7 @@ typedef struct s_token
 		TOKEN_APPEND,
 		TOKEN_NULL,
 		TOKEN_DLR,
-	}	type;
+	}	e_type;
 }	t_token;
 
 t_token	*init_token(int type, char *value);
